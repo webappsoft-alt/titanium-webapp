@@ -20,7 +20,7 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     const initializeSocket = async () => {
       try {
-        const newSocket = io('https://titaniumhub.net', {
+        const newSocket = io('https://api.titanium.com', {
           query: { token },
           reconnection: true,
           reconnectionAttempts: 15, // You can change this to Infinity if needed
