@@ -1,0 +1,121 @@
+export const fittings = [
+  {
+    id: 'titanium-concentric-reducer',
+    name: 'Titanium Concentric Reducer',
+    category: 'Fittings',
+    type: 'Reducer',
+    form: 'Concentric',
+    description: 'High-quality titanium concentric reducers for precision pipe connections',
+    imageUrl: 'https://shop.titanium.com/spree/products/15/large/Eccentric_Conducer_2_Hi.jpg?1576521772',
+    specifications: {
+      grades: ['Grade 2', 'Grade 5'],
+      dimensions: [{ min: 0.5, max: 24, unit: 'inches' }],
+    },
+  },
+  {
+    id: 'titanium-90-elbow',
+    name: 'Titanium 90° Elbow',
+    category: 'Fittings',
+    type: 'Elbow',
+    form: '90-degree',
+    description: 'Precision-engineered 90-degree titanium elbows',
+    imageUrl: 'https://shop.titanium.com/spree/products/13/large/90%C2%BAElbow_1_Hi.jpg?1571332281',
+    specifications: {
+      grades: ['Grade 2', 'Grade 5'],
+      dimensions: [{ min: 0.5, max: 24, unit: 'inches' }],
+    },
+  },
+  {
+    id: 'titanium-45-elbow',
+    name: 'Titanium 45° Elbow',
+    category: 'Fittings',
+    type: 'Elbow',
+    form: '45-degree',
+    description: 'High-performance 45-degree titanium elbows',
+    imageUrl: 'https://shop.titanium.com/spree/products/12/large/45%C2%BAElbow_1_Hi.jpg?1571332275',
+    specifications: {
+      grades: ['Grade 2', 'Grade 5'],
+      dimensions: [{ min: 0.5, max: 24, unit: 'inches' }],
+    },
+  },
+  {
+    id: 'titanium-eccentric-reducer',
+    name: 'Titanium Eccentric Reducer',
+    category: 'Fittings',
+    type: 'Reducer',
+    form: 'Eccentric',
+    description: 'Professional-grade titanium eccentric reducers',
+    imageUrl: 'https://shop.titanium.com/spree/products/16/large/Concentric_Conducer_2_Hi.jpg?1576521812',
+    specifications: {
+      grades: ['Grade 2', 'Grade 5'],
+      dimensions: [{ min: 0.5, max: 24, unit: 'inches' }],
+    },
+  },
+  {
+    id: 'titanium-flange',
+    name: 'Titanium Flange',
+    category: 'Fittings',
+    type: 'Flange',
+    form: 'Standard',
+    description: 'Industrial-strength titanium flanges',
+    imageUrl: 'https://shop.titanium.com/spree/products/17/large/Flanges_1_Hi.jpg?1571332327',
+    specifications: {
+      grades: ['Grade 2', 'Grade 5'],
+      dimensions: [{ min: 0.5, max: 24, unit: 'inches' }],
+    },
+  },
+  {
+    id: 'titanium-stub-ends',
+    name: 'Titanium Stub Ends',
+    category: 'Fittings',
+    type: 'Stub End',
+    form: 'Standard',
+    description: 'Premium titanium stub ends for industrial applications',
+    imageUrl: 'https://shop.titanium.com/spree/products/20/large/Stub_Hi_2.jpg?1571332517',
+    specifications: {
+      grades: ['Grade 2', 'Grade 5'],
+      dimensions: [{ min: 0.5, max: 24, unit: 'inches' }],
+    },
+  },
+  {
+    id: 'titanium-seamless-pipe',
+    name: 'Titanium Seamless Pipe',
+    category: 'Pipes',
+    type: 'Pipe',
+    form: 'Seamless',
+    description: 'High-quality titanium seamless pipes',
+    imageUrl: 'https://shop.titanium.com/spree/products/22/large/Pipe_Hi.jpg?1571332513',
+    specifications: {
+      grades: ['Grade 2', 'Grade 5'],
+      dimensions: [{ min: 0.5, max: 24, unit: 'inches' }],
+    },
+  },
+  {
+    id: 'titanium-tee',
+    name: 'Titanium Tee',
+    category: 'Fittings',
+    type: 'Tee',
+    form: 'Standard',
+    description: 'Professional-grade titanium tee fittings',
+    imageUrl: 'https://shop.titanium.com/spree/products/11/large/Tee_1_Hi.jpg?1571332528',
+    specifications: {
+      grades: ['Grade 2', 'Grade 5'],
+      dimensions: [{ min: 0.5, max: 24, unit: 'inches' }],
+    },
+  },
+  {
+    id: 'titanium-welded-pipe',
+    name: 'Titanium Welded Pipe',
+    category: 'Pipes',
+    type: 'Pipe',
+    form: 'Welded',
+    description: 'Premium titanium welded pipes',
+    imageUrl: 'https://shop.titanium.com/spree/products/30/large/Tube_Hi.jpg?1571332536',
+    specifications: {
+      grades: ['Grade 2', 'Grade 5'],
+      dimensions: [{ min: 0.5, max: 24, unit: 'inches' }],
+    },
+  }
+];
+
+export { fittings as products };

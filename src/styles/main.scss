@@ -1,0 +1,225 @@
+// General container for the phone input
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none !important;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+}
+
+.mySwiper {
+    padding-inline: 2rem !important;
+
+    @media (min-width:1024) {
+        max-width: 68vw !important;
+        width: 100% !important;
+    }
+}
+
+.swiper-button-next {
+    background-image: url(../../public/assets/arrow-right.svg) !important;
+    right: 0;
+
+    &::after {
+        content: '' !important;
+    }
+}
+
+.swiper-button-prev {
+    background-image: url(../../public/assets/arrow-left.svg) !important;
+    // left: auto !important;
+    left: 0;
+    // right: 42px !important;
+
+    &::after {
+        content: '' !important;
+    }
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 20px !important;
+    background-color: white;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+}
+
+.phone-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    // Label styling
+    label {
+        font-weight: 500;
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 0.25rem;
+    }
+
+    .PhoneInputCountry {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 11px;
+    }
+
+    // Phone input styling
+    .PhoneInputInput {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        min-height: 40px;
+        padding: 0.5rem 1rem;
+        padding-left: 3.5rem;
+        border: 1px solid #d1d5db; // Light gray border
+        border-radius: 0.375rem;
+        font-size: 14px;
+        background-color: #fff;
+        color: #333;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+        &:focus {
+            border-color: #4CAF50; // Green border on focus
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2); // Focus ring
+        }
+
+        &[aria-invalid='true'] {
+            border-color: #dc3545; // Red border for invalid input
+        }
+
+        &::placeholder {
+            color: #aaa; // Placeholder color
+        }
+    }
+}
+
+.text-danger {
+    color: #dc3545;
+}
+
+.innerData {
+    p {
+        margin-bottom: 0.75rem;
+    }
+
+    div {
+        margin-bottom: 0.75rem;
+    }
+
+    a {
+        color: #033668;
+
+        &:focus,
+        &:hover {
+            color: #043481;
+        }
+    }
+}
+
+.ckeditor-content {
+
+    // Paragraph and other base text elements
+    p,
+    ul,
+    ol,
+    li,
+    blockquote {
+        color: white;
+        text-align: center;
+        font-size: 16px;
+        // font-weight: 400;
+        line-height: 1.45;
+        filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1));
+        transition: all 0.5s;
+    }
+
+    // Headings
+    h1 {
+        color: white;
+        text-align: center;
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 1.5;
+        filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1));
+        transition: all 0.5s;
+    }
+
+    h2 {
+        color: white;
+        text-align: center;
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 1.5;
+        filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1));
+        transition: all 0.5s;
+    }
+
+    h3 {
+        color: white;
+        text-align: center;
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 1.5;
+        filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1));
+        transition: all 0.5s;
+    }
+
+    h4 {
+        color: white;
+        text-align: center;
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 1.5;
+        filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1));
+        transition: all 0.5s;
+    }
+
+    h5 {
+        color: white;
+        text-align: center;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 1.5;
+        filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1));
+        transition: all 0.5s;
+    }
+
+    h6 {
+        color: white;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 1.5;
+        filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1));
+        transition: all 0.5s;
+    }
+
+    // Optional: group-hover support
+    .group:hover {
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        ul,
+        ol,
+        li,
+        blockquote {
+            color: white;
+        }
+    }
+
+    strong {
+        font-weight: 700;
+    }
+}
