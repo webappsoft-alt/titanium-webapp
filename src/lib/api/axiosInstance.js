@@ -1,6 +1,6 @@
 import axios from "axios"
 
-export const baseURL = 'http://titanium.ai-invest-bot.pro/api/'
+export const baseURL = 'https://api.titanium.com/api/'
 // export const baseURL = 'http://localhost:5004/api/'
 
 export const axiosInstance = axios.create({
