@@ -218,7 +218,7 @@ export function UserForm() {
     }, [rowData]);
 
     return (
-        <div className="">
+        <div className="pb-20">
             {!isCreateCustomer && <div className='my-3 flex justify-end'>
                 {rowData?.status === "deactivated" ? (
                     <Button
