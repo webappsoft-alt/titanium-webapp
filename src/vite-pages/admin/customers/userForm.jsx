@@ -32,7 +32,6 @@ export function UserForm() {
     const countriesList = useSelector(state => state.prod.countriesList) || []
     const rolesList = useSelector(state => state.prod.rolesList) || []
     const statesList = useSelector(state => state.prod.statesList) || []
-
     const { post, put, get } = ApiFunction()
     const [discountValue, setDiscountValue] = useState("");
     const competMarkup = useSelector(state => state.prod.competMarkup)
@@ -88,9 +87,25 @@ export function UserForm() {
 
     const country = watch('country')
     const state = watch('state')
+    const assignBranch = watch('assignBranch')
     const filterStateList = statesList?.filter(item => item?.country === country?.value) || []
     const isDisabled = (userData?.type === 'sub-admin' && userData?.permissions != 'admin')
-    // const [rolesList, setRolesList] = useState([]);
+
+    const branchValue = assignBranch?.value;
+
+    // helper to filter by branch
+    const filterByBranch = (list) =>
+        Array.isArray(list)
+            ? branchValue
+                ? list.filter((item) => item?.branch.includes(branchValue))
+                : list
+            : [];
+
+    // final lists
+    const accountManagerList = filterByBranch(rolesList?.accountManager);
+    const regionalManagerList = filterByBranch(rolesList?.regionalManager);
+    const salesRepList = filterByBranch(rolesList?.salesRep);
+
     const [territoriesList, setTerritoriesList] = useState([]);
 
     const handleGetTerritories = async (pageNo = 1) => {
@@ -210,9 +225,9 @@ export function UserForm() {
         setValue('otherIndustry', user?.otherIndustry)
         setValue('isCompetitor', user?.isCompetitor)
         setValue('discount', user?.discount)
-        setValue('regionalManager', { label: user?.regionalManager?.email, value: user?.regionalManager?._id })
-        setValue('salesRep', { label: user?.salesRep?.email, value: user?.salesRep?._id })
-        setValue('accountManager', { label: user?.accountManager?.email, value: user?.accountManager?._id })
+        setValue('regionalManager', { label: user?.regionalManager?.email ? `${user?.regionalManager?.fname} ${user?.regionalManager?.lname || ''} (${user?.regionalManager?.email})` : '', value: user?.regionalManager?._id })
+        setValue('salesRep', { label: user?.salesRep?.email ? `${user?.salesRep?.fname || ''} ${user?.salesRep?.lname || ''} (${user?.salesRep?.email || ''})` : '', value: user?.salesRep?._id })
+        setValue('accountManager', { label: user?.accountManager?.email ? `${user?.accountManager?.fname} ${user?.accountManager?.lname || ''} (${user?.accountManager?.email})` : '', value: user?.accountManager?._id })
         setValue('stratixAccount', user?.stratixAccount)
     }
     useEffect(() => {
@@ -329,7 +344,7 @@ export function UserForm() {
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        disabled={!!rowData}
+                                        readOnly={!!rowData}
                                         placeholder="Your Email Address"
                                         aria-invalid={!!errors.email}
                                     />
@@ -530,7 +545,10 @@ export function UserForm() {
                                         onChange={(e) => {
                                             field.onChange(e === null ? {} : e)
                                         }}
-                                        options={rolesList?.accountManager?.map((item, index) => ({ label: item?.email, value: item?._id }))}
+                                        options={accountManagerList?.map(item => ({
+                                            label: `${item.fname} ${item.lname || ''} (${item.email})`,
+                                            value: item._id,
+                                        }))}
                                     // aria-invalid={!!errors.accountManager}
                                     >
                                     </Select>
@@ -552,7 +570,10 @@ export function UserForm() {
                                         onChange={(e) => {
                                             field.onChange(e === null ? {} : e)
                                         }}
-                                        options={rolesList?.salesRep?.map((item, index) => ({ label: item?.email, value: item?._id }))}                                        // aria-invalid={!!errors.salesRep}
+                                        options={salesRepList?.map(item => ({
+                                            label: `${item.fname} ${item.lname || ''} (${item.email})`,
+                                            value: item._id,
+                                        }))}
                                     >
 
                                     </Select>
@@ -574,7 +595,10 @@ export function UserForm() {
                                         onChange={(e) => {
                                             field.onChange(e === null ? {} : e)
                                         }}
-                                        options={rolesList?.regionalManager?.map((item, index) => ({ label: item?.email, value: item?._id }))}
+                                        options={regionalManagerList?.map(item => ({
+                                            label: `${item.fname} ${item.lname || ''} (${item.email})`,
+                                            value: item._id,
+                                        }))}
                                     // aria-invalid={!!errors.regionalManager}
                                     >
                                     </Select>
