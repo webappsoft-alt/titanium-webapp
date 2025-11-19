@@ -15,7 +15,7 @@ import ApiFunction from '@/lib/api/apiFuntions';
 import { handleError } from '@/lib/api/errorHandler';
 import Select from 'react-select'
 import { useDispatch, useSelector } from 'react-redux';
-import { setCustomerData } from '@/lib/redux/products';
+import { setCustomerData, setRolesList } from '@/lib/redux/products';
 import { usePathname, useRouter } from 'next/navigation';
 // Validation schema
 const industry = ["Aerospace", "Defense", "Industrial", "Medical", "Oil / Gas", "Other"]
@@ -30,6 +30,7 @@ export function UserForm() {
     const [isLoading, setIsLoading] = useState(false);
     const userData = useSelector(state => state.auth.userData)
     const countriesList = useSelector(state => state.prod.countriesList) || []
+    const rolesList = useSelector(state => state.prod.rolesList) || []
     const statesList = useSelector(state => state.prod.statesList) || []
 
     const { post, put, get } = ApiFunction()
@@ -89,7 +90,7 @@ export function UserForm() {
     const state = watch('state')
     const filterStateList = statesList?.filter(item => item?.country === country?.value) || []
     const isDisabled = (userData?.type === 'sub-admin' && userData?.permissions != 'admin')
-    const [rolesList, setRolesList] = useState([]);
+    // const [rolesList, setRolesList] = useState([]);
     const [territoriesList, setTerritoriesList] = useState([]);
 
     const handleGetTerritories = async (pageNo = 1) => {
@@ -121,11 +122,14 @@ export function UserForm() {
             });
     };
     const handleGet = async () => {
+        if (rolesList?.length > 0) {
+            return
+        }
         setIsLoading(true)
         await get(`users/titanium/roles`)
             .then((result) => {
                 if (result.success) {
-                    setRolesList(result.data)
+                    dispatch(setRolesList(result.data))
                 }
             }).catch((err) => {
                 console.log(err)

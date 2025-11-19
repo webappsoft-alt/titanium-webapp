@@ -12,6 +12,7 @@ export const productSlice = createSlice({
     customerData: null,
     countriesList: [],
     statesList: [],
+    rolesList: [],
   },
   reducers: {
     setMetalType: (state, action) => {
@@ -28,6 +29,9 @@ export const productSlice = createSlice({
     },
     setTableData: (state, action) => {
       state.tableData = action.payload;
+    },
+    setRolesList: (state, action) => {
+      state.rolesList = action.payload;
     },
     setQuoteData: (state, action) => {
       state.quoteData = action.payload;
@@ -58,6 +62,6 @@ export const productSlice = createSlice({
   },
 });
 
-export const { setMetalType, setStatesList, setCustomerData, setCountriesList, setCompetMarkup, setFaqs, setTerms, setTableData, setQuoteData, removeTableData, updateTableData } = productSlice.actions;
+export const { setMetalType, setRolesList, setStatesList, setCustomerData, setCountriesList, setCompetMarkup, setFaqs, setTerms, setTableData, setQuoteData, removeTableData, updateTableData } = productSlice.actions;
 
 export default productSlice.reducer;
