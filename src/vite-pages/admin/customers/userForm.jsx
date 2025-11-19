@@ -122,7 +122,7 @@ export function UserForm() {
             });
     };
     const handleGet = async () => {
-        if (rolesList?.length > 0) {
+        if (rolesList?.accountManager?.length > 0) {
             return
         }
         setIsLoading(true)
