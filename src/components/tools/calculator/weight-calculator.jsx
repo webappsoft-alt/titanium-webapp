@@ -108,34 +108,6 @@ const DimensionInputs = ({ productForm, tolerance, register, diameterTol, length
             </Select>
           </div>
         </div>}
-      {selectProductData?.dimensions?.includes('width') &&
-        <div className="space-y-2">
-          <Label>
-            Width {getToleranceTooltip(widthUnit, widthTol || 0)}
-          </Label>
-          <div className="flex gap-2">
-            <Input
-              type="number"
-              step="0.01"
-              placeholder="Width"
-              className="flex-1"
-              {...register('dimensions.width.value', {
-                valueAsNumber: true,
-                required: true
-              })}
-            />
-            <Select
-              className="w-24"
-              {...register('dimensions.width.unit', { required: true })}
-            >
-              {units.map(unit => (
-                <SelectOption key={unit.value} value={unit.value}>
-                  {unit.label}
-                </SelectOption>
-              ))}
-            </Select>
-          </div>
-        </div>}
       {selectProductData?.dimensions?.includes('thickness') &&
         <div className="space-y-2">
           <Label>
@@ -164,6 +136,35 @@ const DimensionInputs = ({ productForm, tolerance, register, diameterTol, length
             </Select>
           </div>
         </div>}
+      {selectProductData?.dimensions?.includes('width') &&
+        <div className="space-y-2">
+          <Label>
+            Width {getToleranceTooltip(widthUnit, widthTol || 0)}
+          </Label>
+          <div className="flex gap-2">
+            <Input
+              type="number"
+              step="0.01"
+              placeholder="Width"
+              className="flex-1"
+              {...register('dimensions.width.value', {
+                valueAsNumber: true,
+                required: true
+              })}
+            />
+            <Select
+              className="w-24"
+              {...register('dimensions.width.unit', { required: true })}
+            >
+              {units.map(unit => (
+                <SelectOption key={unit.value} value={unit.value}>
+                  {unit.label}
+                </SelectOption>
+              ))}
+            </Select>
+          </div>
+        </div>}
+
       {selectProductData?.dimensions?.includes('inside-diameter') &&
         <div className="space-y-2">
           <Label>
@@ -629,7 +630,7 @@ export function WeightCalculator() {
                         </SelectOption>
                       ))}
                     </Select>
-                  </div> 
+                  </div>
                 </div>
 
                 {/* Dimensions Section - Shown when all selections are made */}

@@ -12,8 +12,9 @@ export function CalculatorPage() {
         </p>
       </div>
 
-      {/* Information Box - Separate from calculator */}
-      <div className="mb-12 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-8 shadow-sm border border-blue-200">
+      {/* Calculator Form */}
+      <WeightCalculator />
+      <div className="mt-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-8 shadow-sm border border-blue-200">
         <div className="flex flex-col sm:flex-row items-start gap-6">
           <Info className="h-6 w-6 text-blue-600 mt-1 flex-shrink-0" />
           <div>
@@ -30,9 +31,6 @@ export function CalculatorPage() {
           </div>
         </div>
       </div>
-
-      {/* Calculator Form */}
-      <WeightCalculator />
     </div>
   );
 }
