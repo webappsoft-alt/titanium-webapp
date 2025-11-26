@@ -1,6 +1,6 @@
 // app/sitemap.ts (Next.js App Router)
 export default async function sitemap() {
-    const baseUrl = 'https://titanium-blue.vercel.app';
+    const baseUrl = 'https://qqa.titanium.com';
 
     // 1. Static pages
     const staticRoutes = [

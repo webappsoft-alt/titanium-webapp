@@ -1,14 +1,13 @@
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export function middleware(request) {
   const currentUser = request.cookies.get('user')?.value;
   const { pathname } = request.nextUrl;
   const adminUser = ['admin', 'sub-admin']
   const isAuthPage = pathname.startsWith('/auth');
   const isDashboardPage = pathname.startsWith('/dashboard');
   const isQuick = pathname.startsWith('/quick-quote');
-  const isCustomerQuote = pathname.startsWith('/customer/quick-quote');
+  const isCustomerQuote = pathname.startsWith('/customer');
   const isMainPage = pathname === '/';
 
   if (currentUser && isQuick) {

@@ -1,4 +1,6 @@
 import { cn } from "@/lib/utils";
+import { Button } from "../ui/button";
+import Link from "next/link";
 const certifications = [
   {
     name: "Part & Whitney LCS Certified",
@@ -73,6 +75,12 @@ export function CertificationsSection({ className }) {
               </p>
             </div>
           ))}
+        </div>
+        <div className="text-center flex flex-col items-center gap-3 pt-3">
+          <p className="max-w-2xl">Plus a wide range of approvals from most leading OEM's across Aerospace, Medical, Industrial, and Oil and Gas markets.</p>
+          <Link href={'https://titanium.com/quality-systems/'} target="_blank">
+            <Button>View All</Button>
+          </Link>
         </div>
       </div>
     </div>

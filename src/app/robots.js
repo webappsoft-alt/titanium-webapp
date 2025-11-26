@@ -5,6 +5,6 @@ export default function robots() {
       allow: '/',
       disallow: '/dashboard/',
     },
-    sitemap: 'https://titanium-blue.vercel.app/sitemap.xml',
+    sitemap: 'https://qqa.titanium.com/sitemap.xml',
   }
 }

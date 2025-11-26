@@ -32,7 +32,7 @@ const PaginationEllipsis = () => (
 
 const DiscountedTable = ({ tablesData, setTabelsData, totalItems, totalPages, setLastId, isTableLoad }) => {
   const competMarkup = useSelector(state => state.prod.competMarkup)
-
+  const isLogin = useSelector(state => state.auth.isLogin)
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const userData = useSelector(state => state.auth.userData)
@@ -155,6 +155,10 @@ const DiscountedTable = ({ tablesData, setTabelsData, totalItems, totalPages, se
     }
   };
   const handleAdd = async (item) => {
+    if (!isLogin) {
+       push('/auth/login')
+      return
+    }
     setIsLoading(true)
     await post('/cart/create', item)
       .then((result) => {

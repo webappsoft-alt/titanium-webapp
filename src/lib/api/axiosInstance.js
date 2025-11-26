@@ -18,7 +18,7 @@ axiosInstance.interceptors.request.use(
   error => Promise.reject(error)
 );
 
-  export const logoutCookes = async () => {
+export const logoutCookes = async () => {
   // Remove cookie from the server
   await fetch("/api/delete-cookie", {
     method: "POST",

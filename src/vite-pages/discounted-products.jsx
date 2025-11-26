@@ -37,8 +37,8 @@ export function DiscountedProductsPage() {
   const handleGetFilterProd = async () => {
     setIsLoading(true);
     await get(`discounted-prod/filter`, {
-      alloyFamily: selectedProduct?.alloyFamily || "",
-      productForm: selectedProduct?.productForm || "",
+      alloyFamily: selectedProduct?.value || "",
+      // productForm: selectedProduct?.productForm || "",
       specifications: selectedSpecification || "",
       gradeAlloy: selectedGrade || "",
       primaryDimension: selectedPrimaryDim || "",
@@ -54,8 +54,8 @@ export function DiscountedProductsPage() {
   const handleGetDiscounded = async (pageNo = 1) => {
     setIsLoadingTransform(true);
     await get(`discounted-prod/all/${pageNo}`, {
-      alloyFamily: selectedProduct?.alloyFamily || "",
-      productForm: selectedProduct?.productForm || "",
+      alloyFamily: selectedProduct?.value || "",
+      // productForm: selectedProduct?.productForm || "",
       specifications: selectedSpecification || "",
       gradeAlloy: selectedGrade || "",
       primaryDimension: selectedPrimaryDim || "",
@@ -99,6 +99,7 @@ export function DiscountedProductsPage() {
   const specificationsOptions =
     filterData?.specifications?.map((item) => ({ label: item, value: item })) ||
     [];
+    console.log(productData)
   const primaryDimensionOptions =
     filterData?.primaryDimension?.map((item) => ({
       label: item,

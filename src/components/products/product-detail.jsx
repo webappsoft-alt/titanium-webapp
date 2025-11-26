@@ -307,7 +307,7 @@ const ProductDetail = () => {
       })
   }, [product])
   useEffect(() => {
-    if (product) {
+    if (product && isLogin) {
       handleGetFavoriteProducts()
     }
   }, [product]);

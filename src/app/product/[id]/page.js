@@ -48,7 +48,7 @@ export async function generateMetadata({ params }) {
       name: name || defaultTitle,
       description: description || defaultDescription,
       image: image || '/default-product-image.jpg',
-      url: `https://titanium-blue.vercel.app${productUrl}`,
+      url: `https://qqa.titanium.com${productUrl}`,
     } : null;
 
     return {
@@ -64,17 +64,17 @@ export async function generateMetadata({ params }) {
         title: title || name || defaultTitle,
         description: description || defaultDescription,
         siteName: 'Titanium Industries, Inc.',
-        url: `https://titanium-blue.vercel.app${productUrl}`,
+        url: `https://qqa.titanium.com${productUrl}`,
         images: image ? [
           {
-            url: image.startsWith('http') ? image : `https://titanium-blue.vercel.app${image}`,
+            url: image.startsWith('http') ? image : `https://qqa.titanium.com${image}`,
             width: 1200,
             height: 630,
             alt: name || 'Product Image',
           },
         ] : [
           {
-            url: 'https://titanium-blue.vercel.app/default-social-image.jpg',
+            url: 'https://qqa.titanium.com/default-social-image.jpg',
             width: 1200,
             height: 630,
             alt: 'Titanium Industries',
@@ -88,16 +88,16 @@ export async function generateMetadata({ params }) {
         title: title || name || defaultTitle,
         description: description || defaultDescription,
         images: image ? [
-          image.startsWith('http') ? image : `https://titanium-blue.vercel.app${image}`
-        ] : ['https://titanium-blue.vercel.app/default-social-image.jpg'],
+          image.startsWith('http') ? image : `https://qqa.titanium.com${image}`
+        ] : ['https://qqa.titanium.com/default-social-image.jpg'],
         creator: '@TitaniumInd',
         site: '@TitaniumInd',
       },
-      metadataBase: new URL('https://titanium-blue.vercel.app/'),
+      metadataBase: new URL('https://qqa.titanium.com/'),
       alternates: {
-        canonical: `https://titanium-blue.vercel.app${productUrl}`,
+        canonical: `https://qqa.titanium.com${productUrl}`,
         languages: {
-          'en-US': `https://titanium-blue.vercel.app${productUrl}`,
+          'en-US': `https://qqa.titanium.com${productUrl}`,
         },
       },
       robots: {
@@ -126,7 +126,7 @@ export async function generateMetadata({ params }) {
     return {
       title: "Titanium Industries, Inc.",
       description: "Titanium Industries is a global leader in Specialty Metals supply. Complete inventory of Titanium Round Bar, Titanium Plate & Sheet, and more.",
-      metadataBase: new URL('https://titanium-blue.vercel.app/'),
+      metadataBase: new URL('https://qqa.titanium.com/'),
       robots: {
         index: true,
         follow: true,
