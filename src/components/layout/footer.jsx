@@ -42,7 +42,7 @@ export function Footer() {
           {/* Payment Methods */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">We Accept</h3>
-            <div className="flex flex-wrap gap-4 items-center">
+            <div className="flex flex-wrap gap-4 items-center opacity-55">
               <img
                 src="https://www.svgrepo.com/show/328127/visa.svg"
                 alt="Visa"

@@ -79,7 +79,7 @@ export function CertificationsSection({ className }) {
         <div className="text-center flex flex-col items-center gap-3 pt-3">
           <p className="max-w-2xl">Plus a wide range of approvals from most leading OEM's across Aerospace, Medical, Industrial, and Oil and Gas markets.</p>
           <Link href={'https://titanium.com/quality-systems/'} target="_blank">
-            <Button>View All</Button>
+            <Button>View all Quality Systems</Button>
           </Link>
         </div>
       </div>
