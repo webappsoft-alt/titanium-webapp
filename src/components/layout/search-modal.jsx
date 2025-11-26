@@ -6,11 +6,12 @@ import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { Input } from "@/components/ui/input";
 
-export function SearchModal({ isOpen, onClose, includedLabels }) {
+export function SearchModal({ isOpen, onClose }) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
   const inputRef = useRef(null);
+  const includedLabels = ["MILL PRODUCTS", "PIPE AND FITTINGS"];
 
   const menuData = useSelector((state) => state.menu.items) || [];
 
@@ -21,7 +22,6 @@ export function SearchModal({ isOpen, onClose, includedLabels }) {
       ?.flatMap((item) => item?.children)
       ?.flatMap((item) => item?.children) || [];
   }, [menuData, includedLabels]);
-
   // Debounced search
   const handleSearch = useCallback(
     debounce((query) => {
@@ -34,7 +34,7 @@ export function SearchModal({ isOpen, onClose, includedLabels }) {
 
       const results = allProducts.filter(
         (product) =>
-          product?.label?.toLowerCase().includes(lower) ||
+          product?.name?.toLowerCase().includes(lower) ||
           product?.description?.toLowerCase().includes(lower) ||
           product?.slug?.toLowerCase().includes(lower)
       );
@@ -139,22 +139,22 @@ function ProductCard({ product, onClick }) {
       className="group rounded-lg overflow-hidden border border-gray-200 bg-white text-left transition hover:shadow-lg hover:border-blue-400"
     >
       {product.image && (
-        <div className="h-40 w-full bg-gray-100 overflow-hidden">
+        <div className="h-32 w-full bg-gray-100 overflow-hidden">
           <img
             src={product.image}
-            alt={product.label}
-            className="h-full w-full object-cover transition group-hover:scale-105"
+            alt={product.name}
+            className="h-full w-full object-contain transition group-hover:scale-105"
           />
         </div>
       )}
 
       <div className="p-4">
         <h3 className="line-clamp-2 font-semibold text-gray-900 group-hover:text-blue-600">
-          {product.label}
+          {product.name}
         </h3>
-        {product.description && (
-          <p className="mt-2 line-clamp-1 text-sm text-gray-600">
-            {product.description}
+        {product?.meta?.description && (
+          <p className=" line-clamp-2 text-sm text-gray-600">
+            {product?.meta?.description}
           </p>
         )}
       </div>
