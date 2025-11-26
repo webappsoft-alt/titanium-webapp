@@ -23,9 +23,11 @@ import { setMenuItems } from "@/lib/redux/menuItem";
 import { setCompetMarkup, setCountriesList, setStatesList } from "@/lib/redux/products";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import { SearchModal } from "./search-modal";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const { push } = useRouter();
   const pathname = usePathname();
   const isLogin = useSelector((state) => state.auth.isLogin);
@@ -34,16 +36,22 @@ export function Header() {
   const userData = useSelector((state) => state.auth.userData);
   const isAuthenticated = useAuth();
   const dispatch = useDispatch();
+
+  // Define which menu items contain products for search
+  const includedLabels = ["Products", "Categories"]; // Adjust based on your menuData structure
+
   const toolsMenuItems = [
     { label: "Weight Calculator", path: "/tools/calculator", icon: Calculator },
     { label: "Technical References", path: "/tools/references", icon: Book },
   ];
   const { get } = ApiFunction();
+
   const handleLogout = () => {
     dispatch(setLogout());
     push("/");
     toast.success("Logout successfully");
   };
+
   const countriesList = useSelector(state => state.prod.countriesList) || []
   const statesList = useSelector(state => state.prod.statesList) || []
 
@@ -58,6 +66,7 @@ export function Header() {
       }).finally(() => {
       })
   }
+
   const handleGetCountries = async (pageNo = 1) => {
     await get(`countries/`)
       .then((result) => {
@@ -92,6 +101,7 @@ export function Header() {
         console.log(err);
       });
   };
+
   useEffect(() => {
     handleGetProduct();
     handleGetCountries()
@@ -121,6 +131,7 @@ export function Header() {
         console.log(err);
       });
   };
+
   useEffect(() => {
     if (isLogin) {
       handleGetUser();
@@ -161,7 +172,11 @@ export function Header() {
               </Link>
             ))}
             <div className="flex items-center space-x-4 border-l pl-2">
-              <button className="text-gray-600 max-lg:hidden hover:text-blue-600">
+              <button
+                onClick={() => setSearchOpen(true)}
+                className="text-gray-600 max-lg:hidden hover:text-blue-600"
+                aria-label="Search"
+              >
                 <Search className="h-4 w-4" />
               </button>
               <Link
@@ -208,7 +223,6 @@ export function Header() {
             <Link href="/">
               <img
                 src="/web-app-manifest-512x512.png"
-                // src="https://nycrhythm.live/2.svg"
                 alt="Titanium Industries"
                 className="h-10 w-auto me-2"
               />
@@ -265,6 +279,13 @@ export function Header() {
         isOpen={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
       />
+
+      {/* Search Modal */}
+      {searchOpen && <SearchModal
+        isOpen={searchOpen}
+        onClose={() => setSearchOpen(false)}
+        includedLabels={includedLabels}
+      />}
     </header>
   );
 }

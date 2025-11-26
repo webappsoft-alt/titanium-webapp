@@ -87,9 +87,9 @@ export function DiscountedProductsPage() {
     }
   }, [
     selectedProduct,
-    selectedSpecification,
-    selectedPrimaryDim,
-    selectedGrade,
+    // selectedSpecification,
+    // selectedPrimaryDim,
+    // selectedGrade,
   ]);
 
   const productOptions =
@@ -99,7 +99,6 @@ export function DiscountedProductsPage() {
   const specificationsOptions =
     filterData?.specifications?.map((item) => ({ label: item, value: item })) ||
     [];
-    console.log(productData)
   const primaryDimensionOptions =
     filterData?.primaryDimension?.map((item) => ({
       label: item,
