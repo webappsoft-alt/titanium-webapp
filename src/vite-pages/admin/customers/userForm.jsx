@@ -61,7 +61,7 @@ export function UserForm() {
         otherIndustry: z.string().min(0).optional(),
         zipCode: z.string().min(0),
         city: z.string().min(0),
-        phone: z.string({ required_error: 'Phone Number is required' }),
+        phone: z.string().optional(),
         email: z.string({ required_error: 'Email is required' }).email('Invalid email address'),
     })
     const {
@@ -73,6 +73,7 @@ export function UserForm() {
     } = useForm({
         resolver: zodResolver(schema),
         defaultValues: {
+            phone:'',
             country: {},
             state: {},
             assignBranch: {},
