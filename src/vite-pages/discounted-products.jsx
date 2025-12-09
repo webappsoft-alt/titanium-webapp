@@ -186,6 +186,7 @@ export function DiscountedProductsPage() {
                 options={[{ label: "All", value: "" }, ...productOptions]}
                 onChange={(option) => {
                   setSelectedProduct(option);
+                   setSelectedProductForm({ label: "All", value: "" });
                   setLastId(1);
                 }}
                 classNamePrefix="react-select"
@@ -290,6 +291,7 @@ export function DiscountedProductsPage() {
                 className="whitespace-nowrap"
                 onClick={() => {
                   setSelectedProduct({ label: "All", value: "" });
+                  setSelectedProductForm({ label: "All", value: "" });
                   setSelectedGrade("");
                   setSelectedSpecification("");
                   setSelectedPrimaryDim("");

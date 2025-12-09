@@ -10,8 +10,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { FormFeedback } from "@/components/ui/formFeedBack";
 import { Button } from "@/components/ui/button";
 import ApiFunction from "@/lib/api/apiFuntions";
-import { CKEditor } from '@ckeditor/ckeditor5-react'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { ArrowLeft } from "lucide-react";
 import SpinnerOverlay from "@/components/ui/spinnerOverlay";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -23,6 +21,18 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { uploadFile } from "@/lib/api/uploadFile";
 import { Spinner } from "@/components/ui/spinner";
+import dynamic from "next/dynamic";
+
+const CKEditor = dynamic(
+  () => import("@ckeditor/ckeditor5-react").then(mod => mod.CKEditor),
+  { ssr: false }
+);
+
+const ClassicEditor = dynamic(
+  () => import("@ckeditor/ckeditor5-build-classic"),
+  { ssr: false }
+);
+
 
 const schema = yup.object().shape({
     name: yup.string().required("Product name is required"),
