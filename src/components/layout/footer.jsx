@@ -40,7 +40,7 @@ export function Footer() {
           </div>
 
           {/* Payment Methods */}
-          <div className="space-y-4">
+          {/* <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">We Accept</h3>
             <div className="flex flex-wrap gap-4 items-center opacity-55">
               <img
@@ -64,7 +64,7 @@ export function Footer() {
                 className="h-8"
               />
             </div>
-          </div>
+          </div> */}
 
           {/* Contact */}
           <div className="space-y-4">

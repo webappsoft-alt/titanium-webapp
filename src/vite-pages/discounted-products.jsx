@@ -13,7 +13,13 @@ export function DiscountedProductsPage() {
   const [productData, setProductData] = useState([]);
   const [isLoadingTransform, setIsLoadingTransform] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [productsForm, setProductsForm] = useState([]);
+
   const [selectedProduct, setSelectedProduct] = useState({
+    label: "All",
+    value: "",
+  });
+  const [selectedProductForm, setSelectedProductForm] = useState({
     label: "All",
     value: "",
   });
@@ -23,6 +29,20 @@ export function DiscountedProductsPage() {
   const [filterData, setfilterData] = useState(null);
 
   const { get } = ApiFunction();
+  const groupedOptions = productsForm?.map((item) => ({
+    label:
+      item?.type === "mill-product"
+        ? "Mill Product"
+        : item?.type === "pipe-fitting"
+          ? "Pipe & Fittings"
+          : "Margin Guidelines",
+
+    options: item?.products?.map((p) => ({
+      label: p.product,
+      value: p._id,
+    })),
+  }));
+
   const handleGetProduct = async () => {
     setIsLoading(true);
     await get(`product/alloy-family`)
@@ -34,14 +54,30 @@ export function DiscountedProductsPage() {
       })
       .finally(() => setIsLoading(false));
   };
+  const handleGetByName = async () => {
+    setIsLoading(true)
+    const urlsData = {
+      nameValue: selectedProduct?.value,
+    }
+    await get('product/product-form', urlsData)
+      .then((result) => {
+        if (result.success) {
+          setProductsForm(result.product)
+          // setData(result.product)
+        }
+      }).catch((err) => {
+        console.log(err)
+      }).finally(() => setIsLoading(false))
+  }
+
   const handleGetFilterProd = async () => {
     setIsLoading(true);
     await get(`discounted-prod/filter`, {
       alloyFamily: selectedProduct?.value || "",
-      // productForm: selectedProduct?.productForm || "",
-      specifications: selectedSpecification || "",
-      gradeAlloy: selectedGrade || "",
-      primaryDimension: selectedPrimaryDim || "",
+      productForm: selectedProductForm?.label === 'All' ? '' : selectedProductForm?.label || "",
+      // specifications: selectedSpecification || "",
+      // gradeAlloy: selectedGrade || "",
+      // primaryDimension: selectedPrimaryDim || "",
     })
       .then((result) => {
         setfilterData(result?.data);
@@ -55,7 +91,7 @@ export function DiscountedProductsPage() {
     setIsLoadingTransform(true);
     await get(`discounted-prod/all/${pageNo}`, {
       alloyFamily: selectedProduct?.value || "",
-      // productForm: selectedProduct?.productForm || "",
+      productForm: selectedProductForm?.label === 'All' ? '' : selectedProductForm?.label || "",
       specifications: selectedSpecification || "",
       gradeAlloy: selectedGrade || "",
       primaryDimension: selectedPrimaryDim || "",
@@ -72,14 +108,13 @@ export function DiscountedProductsPage() {
   useEffect(() => {
     handleGetProduct();
   }, []);
+
   useEffect(() => {
-    handleGetDiscounded(lastId);
+    if (selectedProduct) {
+      handleGetByName()
+    }
   }, [
-    lastId,
     selectedProduct,
-    selectedSpecification,
-    selectedPrimaryDim,
-    selectedGrade,
   ]);
   useEffect(() => {
     if (selectedProduct) {
@@ -87,9 +122,17 @@ export function DiscountedProductsPage() {
     }
   }, [
     selectedProduct,
-    // selectedSpecification,
-    // selectedPrimaryDim,
-    // selectedGrade,
+    selectedProductForm,
+  ]);
+  useEffect(() => {
+    handleGetDiscounded(lastId);
+  }, [
+    lastId,
+    selectedProduct,
+    selectedProductForm,
+    selectedSpecification,
+    selectedPrimaryDim,
+    selectedGrade,
   ]);
 
   const productOptions =
@@ -148,13 +191,34 @@ export function DiscountedProductsPage() {
                 classNamePrefix="react-select"
               />
             </div>
+            {productsForm?.length > 0 && <div>
+              <h3 className="text-base font-medium mb-1">
+                2. Please Select Product Form
+              </h3>
+              <Select
+                value={{
+                  label: selectedProductForm?.label,
+                  value: selectedProductForm?.value,
+                }}
+                options={[
+                  { label: "All", value: "" },
+                  ...groupedOptions,   // <-- Add grouped options here
+                ]}
+                onChange={(option) => {
+                  setSelectedProductForm(option);
+                  setLastId(1);
+                }}
+                classNamePrefix="react-select"
+              />
 
-            {selectedProduct?.value && (
+            </div>}
+
+            {(productsForm?.length > 0 && selectedProduct?.value) && (
               <>
                 {/* Grade or Alloy Selection */}
                 <div>
                   <h3 className="text-base font-medium mb-1">
-                    2. Please Select Grade or Alloy
+                    3. Please Select Grade or Alloy
                   </h3>
                   <Select
                     value={{
@@ -176,7 +240,7 @@ export function DiscountedProductsPage() {
                 {/* Specification Selection */}
                 <div>
                   <h3 className="text-base font-medium mb-1">
-                    3. Please Select Specification
+                    4. Please Select Specification
                   </h3>
                   <Select
                     value={{
@@ -198,7 +262,7 @@ export function DiscountedProductsPage() {
                 {/* Primary Dimension Selection */}
                 <div>
                   <h3 className="text-base font-medium mb-1">
-                    4. Please Select Primary Dimension (Diameter, Thickness,
+                    5. Please Select Primary Dimension (Diameter, Thickness,
                     etc.)
                   </h3>
                   <Select
