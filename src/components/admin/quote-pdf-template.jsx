@@ -250,6 +250,12 @@ const QuotationPDFTemplate = ({ quotationData }) => {
                             <View key={index} style={styles.tableRow}>
                                 <View style={[styles.tableCell, styles.itemCol]}>
                                     <Text>{item?.alloyFamily}, {item?.productForm}, {item?.primaryDimension} {(item?.lengthTolerance && item?.lengthTolerance !== 'NaN\"') ? `±${item?.lengthTolerance}` : ""}</Text>
+                                    {item?.cutLength ? <Text>
+                                        Custom Cut Length: {item?.cutLength}"
+                                    </Text> : ""}{" "}
+                                    {item?.cutWidth ? <Text>
+                                        Custom Cut Width: {item?.cutWidth}"
+                                    </Text> : ""}
                                 </View>
                                 <View style={[styles.tableCell, styles.specCol]}>
                                     <Text>{item?.specifications}</Text>
