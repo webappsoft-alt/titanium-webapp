@@ -8,7 +8,7 @@ export const dynamicParams = true;
 
 // Generate static paths based on keywords
 export async function generateStaticParams() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}prod-data/header`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}prod-data/seo-header`, {
     cache: 'force-cache', // or 'no-store' if it must be dynamic (but then not static params)
   });
 
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }) {
   const id = resolvedParams.id;
   
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}prod-data/byId/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}prod-data/seo/${id}`, {
       next: { revalidate: 60 }, // revalidate every 60s
     });
 

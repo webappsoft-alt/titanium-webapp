@@ -29,7 +29,7 @@ export default async function sitemap() {
     }));
 
     // 2. Dynamic product pages from your API
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}prod-data/header`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}prod-data/seo-header`, {
         cache: 'force-cache',
     });
 
