@@ -1,21 +1,20 @@
 'use client'
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { axiosInstance } from "@/lib/api/axiosInstance";
+import ApiFunction from "@/lib/api/apiFuntions";
 import exportToExcel from "@/lib/utils/exportCustomerExcel";
 import moment from "moment";
 import React, { useCallback, useState } from "react";
 
 const QuickQuoteReport = () => {
   const [isLoading, setIsLoading] = useState(false);
-
+  const { get } = ApiFunction()
   const handleGenerateReport = useCallback(async (pageNo = 1) => {
     setIsLoading(true);
-    await axiosInstance
-      .get(`quotation/generate-report`)
+    await get(`quotation/generate-report`)
       .then((result) => {
-        if (result.data.success) {
-          const quoteData = result.data.quotations;
+        if (result.success) {
+          const quoteData = result.quotations;
           const data = quoteData.map((quote) => ({
             ID: quote?._id,
             created_at: moment(quote?.createdAt).format("lll"),

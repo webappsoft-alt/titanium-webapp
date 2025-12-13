@@ -4,11 +4,12 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Spinner } from '@/components/ui/spinner';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { axiosInstance } from '@/lib/api/axiosInstance';
+import ApiFunction from '@/lib/api/apiFuntions';
 import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react'
 
 const SalesReport = () => {
+    const {get} = ApiFunction()
     function getFirstDateOfMonth() {
         const now = new Date();
         return new Date(now.getFullYear(), now.getMonth(), 1);
@@ -21,9 +22,9 @@ const SalesReport = () => {
     };
     const handleGetStats = useCallback(async () => {
         setIsLoading(true)
-        await axiosInstance.get('quotation/stats', { params: formData })
+        await get('quotation/stats', formData)
             .then((result) => {
-                setStatsData(result.data?.stats)
+                setStatsData(result?.stats)
             }).catch((err) => {
                 console.log(err)
             }).finally(() => setIsLoading(false))

@@ -1,22 +1,22 @@
 'use client'
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { axiosInstance } from '@/lib/api/axiosInstance'
+import ApiFunction from '@/lib/api/apiFuntions';
 import exportToExcel from '@/lib/utils/exportCustomerExcel';
 import moment from 'moment';
 import React, { useCallback, useState } from 'react'
 
 const CustomerReport = () => {
   const [isLoading, setIsLoading] = useState(false);
-
+  const { get } = ApiFunction()
 
   const handleGenerateReport = useCallback(async () => {
     setIsLoading(true)
-    await axiosInstance.get(`users/customer/1/all`, { params: { isGenerateReport: true } })
+    await get(`users/customer/1/all`, { isGenerateReport: true })
       .then((result) => {
-        if (result.data.success) {
+        if (result.success) {
           // Define the data
-          const users = result.data.users
+          const users = result.users
           const data = users.map(user => ({
             ID: user?._id,
             company: user?.company,

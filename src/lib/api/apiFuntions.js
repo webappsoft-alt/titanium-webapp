@@ -6,6 +6,7 @@ import { setLogout } from "../redux/loginForm";
 import toast from "react-hot-toast";
 import { useRef, useCallback } from 'react'; // Add these imports
 import { useRouter } from "next/navigation";
+import { decryptResponse } from "./decryptResponse";
 
 const ApiFunction = () => {
     const dispatch = useDispatch();
@@ -53,7 +54,7 @@ const ApiFunction = () => {
             params,
             signal: requestSignal,
         })
-            .then(response => response?.data)
+            .then((response) => decryptResponse(response?.data))
             .catch(error => {
                 console.error("Error in GET request:", error);
                 if (error?.response?.status === 401) {
@@ -94,7 +95,7 @@ const ApiFunction = () => {
             headers,
             signal: requestSignal,
         })
-            .then(response => response?.data)
+            .then((response) => decryptResponse(response?.data))
             .catch(error => {
                 console.error("Error in POST request:", error);
                 if (error?.response?.status === 401) {
@@ -130,7 +131,7 @@ const ApiFunction = () => {
             headers,
             signal: requestSignal,
         })
-            .then(response => response?.data)
+            .then((response) => decryptResponse(response?.data))
             .catch(error => {
                 console.error("Error in DELETE request:", error);
                 if (error?.response?.status === 401) {
@@ -165,7 +166,7 @@ const ApiFunction = () => {
             headers,
             signal: requestSignal,
         })
-            .then(response => response?.data)
+            .then((response) => decryptResponse(response?.data))
             .catch(error => {
                 console.error("Error in PUT request:", error);
                 if (error?.response?.status === 401) {

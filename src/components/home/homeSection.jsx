@@ -13,8 +13,6 @@ export function HomeSection() {
     await get(`content/all`)
       .then((result) => {
         if (result) {
-          console.log(result);
-
           setsectionCard(result.data)
         }
       }).catch((err) => {
@@ -42,7 +40,7 @@ export function HomeSection() {
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3 sm:grid-cols-2">
           {sectionCard?.map((card, index) => (
             <div
-              key={card.title}
+              key={index}
               className="group relative h-80 rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition-all duration-500 transform hover:scale-105"
               style={{
                 animationDelay: `${index * 0.1}s`,
