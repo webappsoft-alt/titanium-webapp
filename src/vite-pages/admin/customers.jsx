@@ -56,7 +56,7 @@ export function AdminCustomersPage() {
     put(`users/change/${status}/${id}`)
       .then((result) => {
         if (result.success) {
-          handleUserList();
+          handleUserList(lastId);
           toast.success(result.message);
         }
       })
@@ -183,30 +183,29 @@ export function AdminCustomersPage() {
                 Activate
               </Button>
             ) : (
-              <Button
-                variant={status === "active" ? "secondary" : "danger"}
-                size="sm"
-                className={
-                  status !== "active"
-                    ? ""
-                    : "bg-red-600 text-white hover:bg-red-700"
-                }
-                disabled={isAccpectLoading}
-                onClick={() =>
-                  handleAcceptCustomer(
-                    row?.original?._id,
-                    status === "active" ? "deactivated" : "active"
-                  )
-                }
-              >
-                {status === "active" ? (
-                  <X size={17} />
-                ) : isAccpectLoading ? (
-                  "Accpet...."
-                ) : (
-                  "Accept"
-                )}
-              </Button>
+              <>
+                {status !== "active" && <Button
+                  variant="secondary"
+                  size="sm"
+                  disabled={isAccpectLoading || status === "active"}
+                  onClick={() =>
+                    handleAcceptCustomer(row?.original?._id, "active")
+                  }
+                >
+                  {isAccpectLoading && status !== "active" ? "Accepting..." : "Accept"}
+                </Button>}
+                <Button
+                  variant="danger"
+                  size="icon"
+                  className="bg-red-600 text-white hover:bg-red-700"
+                  disabled={isAccpectLoading}
+                  onClick={() =>
+                    handleAcceptCustomer(row?.original?._id, "deactivated")
+                  }
+                >
+                  <X size={16} />
+                </Button>
+              </>
             )}
           </div>
         );

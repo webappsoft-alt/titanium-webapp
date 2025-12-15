@@ -81,7 +81,7 @@ export function CheckoutPage() {
   };
   const totalAmount = calculateTotalPrice(tableData, userData?.discount || "0")
   const taxAmount = calculateTax(totalAmount, 0)
-
+  const isBelowMinimum = totalAmount < 150;
   const handleRemove = async (i, item) => {
     dispatch(removeTableData(i))
     await deleteData(`cart/${item?._id}`)
@@ -211,7 +211,7 @@ export function CheckoutPage() {
                             <TableCell>{item?.specifications} </TableCell>
                             <TableCell>{item?.quantity} PCS
                               {/* {item?.uom === 'lb' ? 'lb.' : item?.uom === 'ft' ? 'ft.' : item?.uom === 'inch' && 'in.'} */}
-                               </TableCell>
+                            </TableCell>
                             <TableCell>${Number(item?.prices?.price).toFixed(2)} </TableCell>
                             <TableCell>${(Number(item?.prices?.price) * Number(item?.quantity)).toFixed(2)} </TableCell>
                             <TableCell className="p-0" > <div className='flex' ><Button onClick={() => handleRemove(index, item)} variant='secondary' className='px-2 py-1 h-auto' ><X size={20} /></Button></div> </TableCell>
@@ -238,19 +238,23 @@ export function CheckoutPage() {
                             </span>
                           </div>
                           <div className="text-blue-600 ">${totalAmount.toFixed(2)}</div>
-                          {/* 
-                          <div>Tax: </div>
-                          <div className="text-blue-600">${taxAmount?.toFixed(2) || '0.00'}</div>
-
-                          <div>Quote Total: </div>
-                          <div className="text-blue-600">${(taxAmount + totalAmount)?.toFixed(2)}</div> */}
+                          {isBelowMinimum && (
+                            <p className="text-red-600 text-base font-medium mb-1">
+                              Minimum order is $150
+                            </p>
+                          )}
                         </div>
 
                         <Button className='rounded-full' variant='outline' onClick={() => push('/quick-quote')} >Edit Quote</Button>
                         <button
                           type='submit'
-                          disabled={!tableData?.length > 0 || isSubmitting}
-                          className="px-8 py-2 bg-[#0A1F3C] text-white text-base font-semibold rounded-full hover:bg-[#1B365D] transition-colors"
+                          disabled={!tableData?.length > 0 || isSubmitting || isBelowMinimum}
+                          className={`px-8 py-2 text-base font-semibold rounded-full transition-colors
+                          ${(!tableData?.length > 0 || isSubmitting || isBelowMinimum)
+                              ? "bg-gray-400 cursor-not-allowed opacity-60"
+                              : "bg-[#0A1F3C] text-white hover:bg-[#1B365D] cursor-pointer"
+                            }
+                        `}
                         >
                           Proceed To Billing & Shipping
                         </button>
