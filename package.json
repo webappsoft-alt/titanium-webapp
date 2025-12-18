@@ -36,7 +36,7 @@
     "jspdf": "^2.5.1",
     "lucide-react": "^0.344.0",
     "moment": "^2.30.1",
-    "next": "^15.3.6",
+    "next": "15.3.8",
     "next-sitemap": "^4.2.3",
     "papaparse": "^5.5.1",
     "react": "^18.2.0",
