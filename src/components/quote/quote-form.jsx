@@ -1508,7 +1508,7 @@ export function QuoteForm() {
                 disabled={!tableData?.length > 0 || isLoading}
                 className="px-8 py-1.5 bg-[#0A1F3C] text-white text-base font-medium rounded-full hover:bg-[#1B365D] transition-colors"
               >
-                Checkout
+                Finalize Quote
               </button>
             </div>
           </div>

@@ -230,7 +230,7 @@ export function PaymentCard({ setIsActive, quoteData }) {
 
             <div className='flex gap-3 items-center'>
                 <Button type="submit" className="" disabled={isLoading}>
-                    {isLoading ? 'Proceed to Checkout...' : 'Proceed to Checkout'}
+                    {isLoading ? 'Finish Quote...' : 'Finish Quote'}
                 </Button>
                 <Button type="button" variant='outline' className="" onClick={() => setIsActive('2')} disabled={isLoading}>
                     {'Previous'}

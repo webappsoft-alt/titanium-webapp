@@ -26,7 +26,7 @@ const addressFieldsSchema = z.object({
     address2: z.string().optional(),
     country: z.string().min(1, { message: 'Country is required' }),
     city: z.string().min(1, { message: 'City is required' }),
-    state: z.string().optional(),
+    state: z.string().min(1, { message: 'Country is required' }),
     zipCode: z.string().optional(),
 });
 
