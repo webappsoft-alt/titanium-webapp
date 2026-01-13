@@ -17,6 +17,7 @@ import { FixedSizeList as List } from "react-window";
 import { useRouter } from "next/navigation";
 import { countries } from "@/data/countries";
 import Input_ from "postcss/lib/input";
+import { Badge } from "@/components/ui/badge";
 const ITEM_HEIGHT = 35; // Height per row
 
 export function TerritoriesForm({ rowData }) {
@@ -71,20 +72,22 @@ export function TerritoriesForm({ rowData }) {
   });
   const selectedStates = watch("states");
   const selectedCountries = watch("countries");
+  const selectedStateData = (selectedStates?.length > 0 && statesList) ? statesList?.filter(item => selectedStates?.includes(item?._id)) : []
+  const selectedCountryData = (selectedCountries?.length > 0 && countriesList) ? countriesList?.filter(item => selectedCountries?.includes(item?._id)) : []
 
   const onSubmit = async (data) => {
     const countryData =
       selectedCountries?.length > 0
         ? selectedCountries?.map((item) =>
-            countriesList?.find((innerItem) => innerItem?._id === item)
-          )
+          countriesList?.find((innerItem) => innerItem?._id === item)
+        )
         : [];
 
     const stateData =
       selectedStates?.length > 0
         ? selectedStates?.map((item) =>
-            sortedStates?.find((innerItem) => innerItem?._id === item)
-          )
+          sortedStates?.find((innerItem) => innerItem?._id === item)
+        )
         : [];
     const finalData = {
       code: data.code,
@@ -204,6 +207,9 @@ export function TerritoriesForm({ rowData }) {
               >
                 Select US States
               </Button>
+              <div className="flex flex-wrap gap-2 items-center mt-2">
+                {selectedStateData?.length > 0 && selectedStateData?.map(item => (<Badge  key={item?._id} className={'px-3 py-1 bg-slate-900 text-slate-50 shadow hover:bg-slate-900/90'} >{item?.name} </Badge>))}
+              </div>
               {isStates && (
                 <div className="pt-3">
                   <Input
@@ -211,7 +217,6 @@ export function TerritoriesForm({ rowData }) {
                     placeholder="Search by states..."
                     onChange={(e) => {
                       const searchValue = e.target.value.toLowerCase();
-                      
                       if (searchValue === "") {
                         // Clear search - reset to show all states
                         setSorted((prev) => ({
@@ -308,7 +313,9 @@ export function TerritoriesForm({ rowData }) {
               >
                 Select other countries
               </Button>
-
+              <div className="flex flex-wrap gap-2 items-center mt-2">
+                {selectedCountryData?.length > 0 && selectedCountryData?.map(item => (<Badge key={item?._id} className={'px-3 py-1 bg-slate-900 text-slate-50 shadow hover:bg-slate-900/90'} >{item?.name} </Badge>))}
+              </div>
               {isCountries && (
                 <div className="pt-3">
                   <Input
@@ -316,7 +323,7 @@ export function TerritoriesForm({ rowData }) {
                     placeholder="Search by countries..."
                     onChange={(e) => {
                       const searchValue = e.target.value.toLowerCase();
-                      
+
                       if (searchValue === "") {
                         // Clear search - reset to show all countries
                         setSorted((prev) => ({
