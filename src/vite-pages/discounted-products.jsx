@@ -1,5 +1,7 @@
-'use client'
+"use client";
 import { useEffect, useState } from "react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import ApiFunction from "@/lib/api/apiFuntions";
 import DiscountedTable from "@/components/products/discounted-table";
@@ -7,6 +9,10 @@ import SpinnerOverlay from "@/components/ui/spinnerOverlay";
 import Select from "react-select";
 
 export function DiscountedProductsPage() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const userData = useSelector((state) => state.auth.userData);
   const [count, setCount] = useState(null);
   const [lastId, setLastId] = useState(1);
   const [tabelsData, setTabelsData] = useState([]);
@@ -23,19 +29,76 @@ export function DiscountedProductsPage() {
     label: "All",
     value: "",
   });
-  const [selectedGrade, setSelectedGrade] = useState();
-  const [selectedSpecification, setSelectedSpecification] = useState();
-  const [selectedPrimaryDim, setSelectedPrimaryDim] = useState();
+  const [selectedGrade, setSelectedGrade] = useState("");
+  const [selectedSpecification, setSelectedSpecification] = useState("");
+  const [selectedPrimaryDim, setSelectedPrimaryDim] = useState("");
   const [filterData, setfilterData] = useState(null);
 
   const { get } = ApiFunction();
+
+  // Check if user is not logged in and redirect from /customer path
+  useEffect(() => {
+    if (!userData && pathname.includes("/customer/")) {
+      const queryString = searchParams.toString();
+      const publicPath = "/discounted-products";
+      // Store the intended URL in sessionStorage for redirect after login
+      if (queryString) {
+        sessionStorage.setItem(
+          "redirectAfterLogin",
+          `${pathname}?${queryString}`
+        );
+      }
+      router.push(queryString ? `${publicPath}?${queryString}` : publicPath);
+    }
+  }, [userData, pathname, searchParams, router]);
+
+  // Update URL with query parameters
+  const updateUrlParams = (filters) => {
+    const params = new URLSearchParams();
+    if (filters.product?.value) params.append("product", filters.product.value);
+    if (filters.productForm?.label !== "All" && filters.productForm?.label) {
+      params.append("form", filters.productForm.label);
+    }
+    if (filters.grade) params.append("grade", filters.grade);
+    if (filters.specification) params.append("spec", filters.specification);
+    if (filters.dimension) params.append("dim", filters.dimension);
+
+    const queryString = params.toString();
+    router.push(queryString ? `?${queryString}` : "");
+  };
+
+  // Load filters from URL on mount
+  useEffect(() => {
+    const product = searchParams.get("product");
+    const form = searchParams.get("form");
+    const grade = searchParams.get("grade");
+    const spec = searchParams.get("spec");
+    const dim = searchParams.get("dim");
+
+    if (product) {
+      setSelectedProduct({ label: product, value: product });
+    }
+    if (form) {
+      setSelectedProductForm({ label: form, value: form });
+    }
+    if (grade) {
+      setSelectedGrade(grade);
+    }
+    if (spec) {
+      setSelectedSpecification(spec);
+    }
+    if (dim) {
+      setSelectedPrimaryDim(dim);
+    }
+  }, []);
+
   const groupedOptions = productsForm?.map((item) => ({
     label:
       item?.type === "mill-product"
         ? "Mill Product"
         : item?.type === "pipe-fitting"
-          ? "Pipe & Fittings"
-          : "Margin Guidelines",
+        ? "Pipe & Fittings"
+        : "Margin Guidelines",
 
     options: item?.products?.map((p) => ({
       label: p.product,
@@ -55,26 +118,31 @@ export function DiscountedProductsPage() {
       .finally(() => setIsLoading(false));
   };
   const handleGetByName = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const urlsData = {
       nameValue: selectedProduct?.value,
-    }
-    await get('product/product-form', urlsData)
+    };
+    await get("product/product-form", urlsData)
       .then((result) => {
         if (result.success) {
-          setProductsForm(result.product)
+          setProductsForm(result.product);
           // setData(result.product)
         }
-      }).catch((err) => {
-        console.log(err)
-      }).finally(() => setIsLoading(false))
-  }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => setIsLoading(false));
+  };
 
   const handleGetFilterProd = async () => {
     setIsLoading(true);
     await get(`discounted-prod/filter`, {
       alloyFamily: selectedProduct?.value || "",
-      productForm: selectedProductForm?.label === 'All' ? '' : selectedProductForm?.label || "",
+      productForm:
+        selectedProductForm?.label === "All"
+          ? ""
+          : selectedProductForm?.label || "",
       // specifications: selectedSpecification || "",
       // gradeAlloy: selectedGrade || "",
       // primaryDimension: selectedPrimaryDim || "",
@@ -91,7 +159,10 @@ export function DiscountedProductsPage() {
     setIsLoadingTransform(true);
     await get(`discounted-prod/all/${pageNo}`, {
       alloyFamily: selectedProduct?.value || "",
-      productForm: selectedProductForm?.label === 'All' ? '' : selectedProductForm?.label || "",
+      productForm:
+        selectedProductForm?.label === "All"
+          ? ""
+          : selectedProductForm?.label || "",
       specifications: selectedSpecification || "",
       gradeAlloy: selectedGrade || "",
       primaryDimension: selectedPrimaryDim || "",
@@ -111,19 +182,14 @@ export function DiscountedProductsPage() {
 
   useEffect(() => {
     if (selectedProduct) {
-      handleGetByName()
+      handleGetByName();
     }
-  }, [
-    selectedProduct,
-  ]);
+  }, [selectedProduct]);
   useEffect(() => {
     if (selectedProduct) {
       handleGetFilterProd();
     }
-  }, [
-    selectedProduct,
-    selectedProductForm,
-  ]);
+  }, [selectedProduct, selectedProductForm]);
   useEffect(() => {
     handleGetDiscounded(lastId);
   }, [
@@ -186,35 +252,47 @@ export function DiscountedProductsPage() {
                 options={[{ label: "All", value: "" }, ...productOptions]}
                 onChange={(option) => {
                   setSelectedProduct(option);
-                   setSelectedProductForm({ label: "All", value: "" });
+                  setSelectedProductForm({ label: "All", value: "" });
                   setLastId(1);
+                  updateUrlParams({
+                    product: option,
+                    productForm: { label: "All", value: "" },
+                    grade: "",
+                    specification: "",
+                    dimension: "",
+                  });
                 }}
                 classNamePrefix="react-select"
               />
             </div>
-            {productsForm?.length > 0 && <div>
-              <h3 className="text-base font-medium mb-1">
-                2. Please Select Product Form
-              </h3>
-              <Select
-                value={{
-                  label: selectedProductForm?.label,
-                  value: selectedProductForm?.value,
-                }}
-                options={[
-                  { label: "All", value: "" },
-                  ...groupedOptions,   // <-- Add grouped options here
-                ]}
-                onChange={(option) => {
-                  setSelectedProductForm(option);
-                  setLastId(1);
-                }}
-                classNamePrefix="react-select"
-              />
+            {productsForm?.length > 0 && (
+              <div>
+                <h3 className="text-base font-medium mb-1">
+                  2. Please Select Product Form
+                </h3>
+                <Select
+                  value={{
+                    label: selectedProductForm?.label,
+                    value: selectedProductForm?.value,
+                  }}
+                  options={[{ label: "All", value: "" }, ...groupedOptions]}
+                  onChange={(option) => {
+                    setSelectedProductForm(option);
+                    setLastId(1);
+                    updateUrlParams({
+                      product: selectedProduct,
+                      productForm: option,
+                      grade: selectedGrade,
+                      specification: selectedSpecification,
+                      dimension: selectedPrimaryDim,
+                    });
+                  }}
+                  classNamePrefix="react-select"
+                />
+              </div>
+            )}
 
-            </div>}
-
-            {(productsForm?.length > 0 && selectedProduct?.value) && (
+            {productsForm?.length > 0 && selectedProduct?.value && (
               <>
                 {/* Grade or Alloy Selection */}
                 <div>
@@ -233,6 +311,13 @@ export function DiscountedProductsPage() {
                     onChange={(option) => {
                       setSelectedGrade(option.value);
                       setLastId(1);
+                      updateUrlParams({
+                        product: selectedProduct,
+                        productForm: selectedProductForm,
+                        grade: option.value,
+                        specification: selectedSpecification,
+                        dimension: selectedPrimaryDim,
+                      });
                     }}
                     classNamePrefix="react-select"
                   />
@@ -255,6 +340,13 @@ export function DiscountedProductsPage() {
                     onChange={(option) => {
                       setSelectedSpecification(option.value);
                       setLastId(1);
+                      updateUrlParams({
+                        product: selectedProduct,
+                        productForm: selectedProductForm,
+                        grade: selectedGrade,
+                        specification: option.value,
+                        dimension: selectedPrimaryDim,
+                      });
                     }}
                     classNamePrefix="react-select"
                   />
@@ -278,6 +370,13 @@ export function DiscountedProductsPage() {
                     onChange={(option) => {
                       setSelectedPrimaryDim(option.value);
                       setLastId(1);
+                      updateUrlParams({
+                        product: selectedProduct,
+                        productForm: selectedProductForm,
+                        grade: selectedGrade,
+                        specification: selectedSpecification,
+                        dimension: option.value,
+                      });
                     }}
                     classNamePrefix="react-select"
                   />
@@ -296,6 +395,7 @@ export function DiscountedProductsPage() {
                   setSelectedSpecification("");
                   setSelectedPrimaryDim("");
                   setfilterData([]);
+                  router.push(pathname);
                 }}
               >
                 Reset Filters
