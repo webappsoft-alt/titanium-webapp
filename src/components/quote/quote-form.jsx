@@ -32,6 +32,10 @@ import { calculateWeightWithoutHTML, customCutFormula, getLogicValue, sortCustom
 import { newMetalFamily } from "@/lib/utils/constants";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import toast from "react-hot-toast";
+import { handleError } from "@/lib/api/errorHandler";
+import QuotationPDFTemplate from "../admin/quote-pdf-template";
+import { pdf, } from '@react-pdf/renderer';
 
 const priceRanges = [
   { min: 0, max: 1 },
@@ -61,7 +65,7 @@ const priceRanges = [
 ];
 
 export function QuoteForm() {
-  const { get, post, put, deleteData } = ApiFunction();
+  const { get, post, put, deleteData, header2 } = ApiFunction();
   const competMarkup = useSelector((state) => state.prod.competMarkup);
   const [activeTab, setActiveTab] = useState('stock');
   const dispatch = useDispatch();
@@ -587,7 +591,9 @@ export function QuoteForm() {
       .then((result) => { })
       .catch((err) => {
         console.log(err);
-      });
+      }).finally(() => {
+        handleGetCart()
+      })
   };
   const handleOnChange = async (i, totalQuantity) => {
     const quantity = Math.max(1, Number(totalQuantity));
@@ -653,6 +659,7 @@ export function QuoteForm() {
       console.error(err);
     } finally {
       setIsLoading(false);
+      handleGetCart()
     }
   };
 
@@ -790,6 +797,7 @@ export function QuoteForm() {
       })
       .finally(() => {
         setIsLoading(false)
+        handleGetCart()
       });
     // } else {
     //   const tableIndex = tableData.findIndex(
@@ -843,9 +851,36 @@ export function QuoteForm() {
     //   }
     // }
   };
+  function calculateTax(amount, taxPercent) {
+    const taxAmount = (amount * taxPercent) / 100;
+    return taxAmount;
+  }
+  const handleCreateQuote = async () => {
+    try {
+      const totalAmount = calculateTotalPrice(tableData, userData?.discount || "0")
+      const taxAmount = calculateTax(totalAmount, 0)
+      setIsLoading(true)
+      const response = await post('quotation/finalize-btn/create', { quote: tableData, notes, totalAmount: (taxAmount + totalAmount), subtotal: totalAmount, tax: taxAmount, })
+      if (response?.success) {
+        const blob = await pdf(<QuotationPDFTemplate quotationData={response?.quotation} />).toBlob();
+
+        const formData = new FormData();
+        formData.append('pdf', blob, 'quotation.pdf');
+
+        await put(`quotation/finalize-btn/${response?.quotation?._id}`, formData, { headers: header2 })
+        toast.success(response?.message)
+      }
+    } catch (error) {
+      console.log(error)
+      handleError(error)
+    } finally {
+      setIsLoading(false);
+      push('/customer/cart', { state: notes })
+    }
+  };
   const onSubmitQuote = async (e) => {
     e.preventDefault();
-    push('/customer/cart', { state: notes })
+    await handleCreateQuote()
     // setIsLoading(true);
     // await post("quotation/create", {
     //   quote: tableData,
@@ -1392,7 +1427,7 @@ export function QuoteForm() {
         {tableData?.length > 0 && (
           <div className="pb-2  bg-gradient-to-r from-gray-100 to-gray-200 p-3 md:p-6 rounded-lg">
             <Table >
-             {tableData?.find(item=> !!item.cutLength) && <TableHeader className="pb-0 ">
+              {tableData?.find(item => !!item.cutLength) && <TableHeader className="pb-0 ">
                 <TableCell colSpan={6}>
                   <FormFeedback className="p-0 m-0">Cutting costs are included in the below quote.  All pricing quoted subject to T.I. salesperson validation during order confirmation and contract review.</FormFeedback>
                 </TableCell>
@@ -1475,7 +1510,7 @@ export function QuoteForm() {
                         </div>{" "}
                       </TableCell>
                     </TableRow>
-                    {(item?.cutLength && (tableData?.length-1 !== index)) && <TableRow className="p-0 "> <TableCell colSpan={6} className="bg-white text-center py-[2px] rounded-md" ></TableCell> </TableRow>}
+                    {(item?.cutLength && (tableData?.length - 1 !== index)) && <TableRow className="p-0 "> <TableCell colSpan={6} className="bg-white text-center py-[2px] rounded-md" ></TableCell> </TableRow>}
                   </Fragment>
                 ))}
               </TableBody>
@@ -1508,7 +1543,7 @@ export function QuoteForm() {
                 disabled={!tableData?.length > 0 || isLoading}
                 className="px-8 py-1.5 bg-[#0A1F3C] text-white text-base font-medium rounded-full hover:bg-[#1B365D] transition-colors"
               >
-                Finalize Quote
+                {isLoading ? 'Finalize Quote...' : 'Finalize Quote'}
               </button>
             </div>
           </div>
