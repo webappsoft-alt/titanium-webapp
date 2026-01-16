@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -19,6 +19,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { FormFeedback } from '@/components/ui/formFeedBack';
+import QuotationPDFTemplate from '@/components/admin/quote-pdf-template';
+import { pdf } from '@react-pdf/renderer';
 
 const schema = z
   .object({
@@ -36,7 +38,7 @@ const schema = z
 export function CheckoutPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [notes, setNotes] = useState('');
-  const { deleteData, post, get } = ApiFunction()
+  const { deleteData, post, get, header2 } = ApiFunction()
   const dispatch = useDispatch()
   const state = null
   const userData = useSelector(state => state.auth.userData)
@@ -94,8 +96,21 @@ export function CheckoutPage() {
 
   const onSubmitQuote = async (e) => {
     e.preventDefault()
-    dispatch(setCheckoutData({ quote: tableData, notes, totalAmount: (taxAmount + totalAmount), subtotal: totalAmount, tax: taxAmount, type: 'cart' }))
-    setIsActive('2')
+    const blob = await pdf(<QuotationPDFTemplate quotationData={quoteData} />).toBlob();
+
+    const formData = new FormData();
+    formData.append('pdf', blob, 'quotation.pdf');
+    formData.append('quotationId', quoteData?._id||'');
+    try {
+      setIsSubmitting(true)
+      await post('quotation/proceed-to-btn', formData, { headers: header2 })
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsSubmitting(false)
+      dispatch(setCheckoutData({ quote: tableData, notes, totalAmount: (taxAmount + totalAmount), subtotal: totalAmount, tax: taxAmount, type: 'cart' }))
+      setIsActive('2')
+    }
   }
   const handleGetCart = async () => {
     setIsCartLoading(true)
@@ -103,6 +118,7 @@ export function CheckoutPage() {
       .then((result) => {
         if (result.success) {
           dispatch(setTableData(result.carts))
+          setQuoteData(result?.quotation)
         }
       }).catch((err) => {
         console.log(err)
