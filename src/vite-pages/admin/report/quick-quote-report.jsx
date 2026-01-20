@@ -17,15 +17,16 @@ const QuickQuoteReport = () => {
           const quoteData = result.quotations;
           const data = quoteData.map((quote) => ({
             ID: quote?._id,
-            created_at: moment(quote?.createdAt).format("lll"),
-            updated_at: moment(quote?.updatedAt).format("lll"),
-            number: quote?.quoteNo,
+            created_at: moment(quote?.createdAt).format("l"),
+            updated_at: moment(quote?.updatedAt).format("l"),
+            number: type == 'cart' ? quote?.orderNo : quote?.quoteNo,
             status: quote?.status === "closed" ? "archived" : quote?.status,
             closed_reason: quote?.closedReason || '',
 
             company: quote?.company,
             stratix_account: quote?.user?.stratixAccount,
             user_id: quote?.user?._id,
+            customerStatus: quote?.user?.customerStatus || '',
             email: quote?.email,
             full_name: `${quote?.fname} ${quote?.lname || ""}`,
             phone: quote?.phone,

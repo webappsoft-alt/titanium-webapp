@@ -19,6 +19,15 @@ import { setCustomerData, setRolesList } from '@/lib/redux/products';
 import { usePathname, useRouter } from 'next/navigation';
 // Validation schema
 const industry = ["Aerospace", "Defense", "Industrial", "Medical", "Oil / Gas", "Other"]
+const customerStatusOptions = [
+    { label: "Customer", value: "C" },
+    { label: "Lost Customer", value: "L" },
+    { label: "Prospect", value: "P" },
+    { label: "Inactive Customer", value: "I" },
+    { label: "3 Month Dormant", value: "3MD" },
+    { label: "6 Month Dormant", value: "6MD" },
+];
+
 const keyValueSchema = z.object({
     label: z.string().optional(),
     value: z.string().optional()
@@ -45,7 +54,8 @@ export function UserForm() {
         lname: z.string().min(0).optional(),
         address: z.string().min(0),
         stratixAccount: z.string().min(0).optional(),
-
+        
+        customerStatus: z.string().min(0).optional(),
         accountManager: keyValueSchema.optional(),
         salesRep: keyValueSchema.optional(),
         regionalManager: keyValueSchema.optional(),
@@ -73,7 +83,8 @@ export function UserForm() {
     } = useForm({
         resolver: zodResolver(schema),
         defaultValues: {
-            phone:'',
+            phone: '',
+            customerStatus: '',
             country: {},
             state: {},
             assignBranch: {},
@@ -165,6 +176,7 @@ export function UserForm() {
             salesRep: data?.salesRep?.value || null,
             assignBranch: data?.assignBranch?.value || null,
             industry: data?.industry?.value || null,
+            customerStatus: data?.customerStatus || null,
             discount: discount,
 
             countryID: data?.country?.value || null,
@@ -216,6 +228,7 @@ export function UserForm() {
         setValue('company', user?.company)
         setValue('assignBranch', { label: user?.assignBranch?.code, value: user?.assignBranch?._id })
         setValue('industry', { label: user?.industry, value: user?.industry })
+        setValue('customerStatus', user?.customerStatus)
 
         const countryD = countriesList?.find(item => item?._id === user?.countryID)
         setValue('country', ({ label: countryD?.name, value: countryD?._id, }))
@@ -272,7 +285,7 @@ export function UserForm() {
                         }
                     >
                         {rowData?.status === "active" ? (
-                            "Activate - Click to toggle Deactivate"
+                            "Active - Click to toggle Deactivate"
                         ) : rowData?.status === "inactive" ? (
                             "Pending Approval - Click to toggle Approved"
                         ) : isAccpectLoading ? (
@@ -531,6 +544,27 @@ export function UserForm() {
                                 )}
                             />
                             {errors.stratixAccount && <FormFeedback>{errors.stratixAccount.message}</FormFeedback>}
+                        </div>
+                        <div>
+                            <Label htmlFor="customerStatus">Customer Status</Label>
+                            <Controller
+                                name="customerStatus"
+                                control={control}
+                                defaultValue={''}
+                                render={({ field }) => (
+                                    <Select
+                                        isClearable
+                                        {...field}
+                                        required={false}
+                                        onChange={(e) => {
+                                            field.onChange(e === null ? {} : e)
+                                        }}
+                                        options={customerStatusOptions.map((item, index) => ({ label: item?.label, value: item?.value }))}
+                                    >
+                                    </Select>
+                                )}
+                            />
+                            {errors.customerStatus && <FormFeedback>{errors.customerStatus.message}</FormFeedback>}
                         </div>
                         <div>
                             <Label htmlFor="accountManager">Account Manager (OS)</Label>
