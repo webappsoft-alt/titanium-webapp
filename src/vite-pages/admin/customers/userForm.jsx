@@ -54,8 +54,8 @@ export function UserForm() {
         lname: z.string().min(0).optional(),
         address: z.string().min(0),
         stratixAccount: z.string().min(0).optional(),
-        
-        customerStatus: z.string().min(0).optional(),
+
+        customerStatus: keyValueSchema.optional(),
         accountManager: keyValueSchema.optional(),
         salesRep: keyValueSchema.optional(),
         regionalManager: keyValueSchema.optional(),
@@ -84,7 +84,7 @@ export function UserForm() {
         resolver: zodResolver(schema),
         defaultValues: {
             phone: '',
-            customerStatus: '',
+            customerStatus: {},
             country: {},
             state: {},
             assignBranch: {},
@@ -176,7 +176,7 @@ export function UserForm() {
             salesRep: data?.salesRep?.value || null,
             assignBranch: data?.assignBranch?.value || null,
             industry: data?.industry?.value || null,
-            customerStatus: data?.customerStatus || null,
+            customerStatus: data?.customerStatus?.value || '',
             discount: discount,
 
             countryID: data?.country?.value || null,
@@ -228,7 +228,8 @@ export function UserForm() {
         setValue('company', user?.company)
         setValue('assignBranch', { label: user?.assignBranch?.code, value: user?.assignBranch?._id })
         setValue('industry', { label: user?.industry, value: user?.industry })
-        setValue('customerStatus', user?.customerStatus)
+        const customerStatusData = user?.customerStatus ? customerStatusOptions.find(item => (item.value === user?.customerStatus)) : {}
+        setValue('customerStatus', customerStatusData)
 
         const countryD = countriesList?.find(item => item?._id === user?.countryID)
         setValue('country', ({ label: countryD?.name, value: countryD?._id, }))
