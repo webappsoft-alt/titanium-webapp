@@ -19,7 +19,7 @@ const QuickQuoteReport = () => {
             ID: quote?._id,
             created_at: moment(quote?.createdAt).format("l"),
             updated_at: moment(quote?.updatedAt).format("l"),
-            number: type == 'cart' ? quote?.orderNo : quote?.quoteNo,
+            number: quote?.type == 'cart' ? quote?.orderNo : quote?.quoteNo,
             status: quote?.status === "closed" ? "archived" : quote?.status,
             closed_reason: quote?.closedReason || '',
 
