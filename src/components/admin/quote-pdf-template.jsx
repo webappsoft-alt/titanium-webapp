@@ -187,7 +187,7 @@ const Header = ({ quotationData, headerData }) => {
             <View style={styles.companyHeader}>
                 <Text style={styles.companyName}>{salesOrder ? 'Sales Order' : 'Open Quote'}</Text>
                 <Text style={styles.companyDetails}>{salesOrder ? 'Sales Order' : 'Open Quote'} Number: {salesOrder ? quotationData?.orderNo : quotationData?.quoteNo}</Text>
-                <Text style={styles.companyDetails}>{salesOrder ? 'Order' : 'Quote'} Creation Date: {moment(quotationData?.createdTS ?? quotationData?.createdAt).format('DD-MM-YYYY')}</Text>
+                <Text style={styles.companyDetails}>{salesOrder ? 'Order' : 'Quote'} Creation Date: {moment(quotationData?.createdTS || quotationData?.createdAt).format('DD-MM-YYYY')}</Text>
                 <Text style={styles.companyDetails}>{salesOrder ? 'Order' : 'Quote'} Revision Date: {moment(quotationData?.updatedAt).format('DD-MM-YYYY')}</Text>
                 <Text style={styles.companyDetails}>Email: {quotationData?.email}</Text>
                 <Text style={styles.companyDetails}>Full Name:  {quotationData?.fname} {quotationData?.lname || ''}</Text>
