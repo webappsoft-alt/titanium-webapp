@@ -12,8 +12,8 @@ const UserActivity = ({ tableData = [] }) => {
     const handleGetQuote = async () => {
         await get(`/quotation/byUserId/${id}`)
             .then((result) => {
-                const salesData = result?.data?.filter(item => (["approved", "completed"].includes(item?.status)))
-                const openQuoteData = result?.data?.filter(item => (["pending"].includes(item?.status)))
+                const salesData = result?.data?.filter(item => (['cart', 'regular'].includes(item?.type) && item?.status != 'closed'))
+                const openQuoteData = result?.data?.filter(item => (item?.type == "open-quote" && item?.status != 'closed'))
                 const closeQuoteData = result?.data?.filter(item => (["closed"].includes(item?.status)))
                 setQuoteData({
                     sales: salesData,
@@ -40,8 +40,8 @@ const UserActivity = ({ tableData = [] }) => {
                     {quoteData?.sales.map((item, index) => (
                         <TableBody key={index}>
                             <TableRow>
-                                <TableCell className="border-b border-t" >{moment(item?.createdAt).format('lll')} </TableCell>
-                                <TableCell className="border-b border-t" >{item?.quoteNo} </TableCell>
+                                <TableCell className="border-b border-t" >{moment(item?.createdTS || item?.createdAt).format('lll')} </TableCell>
+                                <TableCell className="border-b border-t" >{item?.orderNo} </TableCell>
                                 <TableCell className="border-b border-t" >${item?.totalAmount} </TableCell>
                             </TableRow>
                         </TableBody>))}
@@ -59,7 +59,7 @@ const UserActivity = ({ tableData = [] }) => {
                     {quoteData?.openQuote.map((item, index) => (
                         <TableBody key={index}>
                             <TableRow>
-                                <TableCell className="border-b border-t" >{moment(item?.createdAt).format('lll')} </TableCell>
+                                <TableCell className="border-b border-t" >{moment(item?.createdTS || item?.createdAt).format('lll')} </TableCell>
                                 <TableCell className="border-b border-t" >{moment(item?.updatedAt).format('lll')} </TableCell>
                                 <TableCell className="border-b border-t" >{item?.quoteNo} </TableCell>
                                 <TableCell className="border-b border-t" >${item?.totalAmount} </TableCell>
@@ -79,10 +79,10 @@ const UserActivity = ({ tableData = [] }) => {
                     {quoteData?.closedQuote.map((item, index) => (
                         <TableBody key={index}>
                             <TableRow>
-                                <TableCell className="border-b border-t" >{moment(item?.createdAt).format('lll')} </TableCell>
+                                <TableCell className="border-b border-t" >{moment(item?.createdTS || item?.createdAt).format('lll')} </TableCell>
                                 <TableCell className="border-b border-t" >{moment(item?.updatedAt).format('lll')} </TableCell>
                                 <TableCell className="border-b border-t" >${item?.totalAmount} </TableCell>
-                                <TableCell className="border-b border-t" > </TableCell>
+                                <TableCell className="border-b border-t" >{item?.closedReason ||''} </TableCell>
                             </TableRow>
                         </TableBody>))}
                 </Table>
