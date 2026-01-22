@@ -91,7 +91,7 @@ const CustomerDashboard = () => {
                                         </div>
                                     </div>
                                     <div className='flex flex-wrap sm:flex-nowrap sm:items-center justify-between gap-2'>
-                                        <div className="text-xs text-gray-500">{moment(item?.createdAt).format('lll')}</div>
+                                        <div className="text-xs text-gray-500">{moment(item?.createdTS || item?.createdAt).format('lll')}</div>
 
                                         <div className=" xl:flex items-center gap-2 break-words max-xl:hidden">
                                             <strong>Quote:</strong>
@@ -140,7 +140,7 @@ const CustomerDashboard = () => {
                                         </div>
                                     </div>
                                     <div className='flex flex-wrap sm:flex-nowrap sm:items-center justify-between gap-2'>
-                                        <div className="text-xs text-gray-500">{moment(item?.createdAt).format('lll')}</div>
+                                        <div className="text-xs text-gray-500">{moment(item?.createdTS || item?.createdAt).format('lll')}</div>
 
                                         <div className=" xl:flex items-center gap-2 break-words max-xl:hidden">
                                             <strong>Order:</strong>

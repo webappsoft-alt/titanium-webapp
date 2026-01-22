@@ -17,7 +17,7 @@ const QuickQuoteReport = () => {
           const quoteData = result.quotations;
           const data = quoteData.map((quote) => ({
             ID: quote?._id,
-            created_at: moment(quote?.createdAt).format("l"),
+            created_at: moment(quote?.createdTS || quote?.createdAt).format("l"),
             updated_at: moment(quote?.updatedAt).format("l"),
             number: quote?.type == 'cart' ? quote?.orderNo : quote?.quoteNo,
             status: quote?.status === "closed" ? "archived" : quote?.status,

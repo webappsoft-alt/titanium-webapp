@@ -81,8 +81,8 @@ export function AdminQuotesPage() {
       id: 'Quote Date',
       header: 'Quote Date',
       cell: (info) => {
-        const { createdAt } = info.row.original
-        return <span className='whitespace-nowrap text-xs'>{format(createdAt, 'MMM d, yyyy')}</span>
+        const { createdAt, } = info.row.original
+        return <span className='whitespace-nowrap text-xs'>{format(info.row.original?.createdTS || createdAt, 'MMM d, yyyy')}</span>
       },
     }),
     columnHelper.display({

@@ -37,7 +37,7 @@ export function CustomerQuotesPage({ apiType = "" }) {
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(true)
   const [quotationData, setQuotationData] = useState([]);
-  const pathname  = usePathname()
+  const pathname = usePathname()
   const [lastId, setLastId] = useState(1);
   const handleGet = async (pageNo = 1) => {
     setIsLoading(true)
@@ -63,7 +63,7 @@ export function CustomerQuotesPage({ apiType = "" }) {
       header: `${apiType === 'orders' ? 'Orders' : 'Quote'} Date`,
       cell: (info) => {
         const { createdAt } = info.row.original
-        return <span className='whitespace-nowrap text-xs'>{format(createdAt, 'MMM d, yyyy')}</span>
+        return <span className='whitespace-nowrap text-xs'>{format(info.row.original?.createdTS || createdAt, 'MMM d, yyyy')}</span>
       },
     }),
     apiType === 'orders' ?
