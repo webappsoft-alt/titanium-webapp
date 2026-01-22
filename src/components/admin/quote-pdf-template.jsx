@@ -181,8 +181,8 @@ const Header = ({ quotationData, headerData }) => {
                 <Text style={styles.companyDetails}>{headerData.companyAddress}</Text>
                 <Text style={[styles.companyDetails, { marginTop: 10 }]}>Ship To:</Text>
                 <Text style={styles.companyDetails}>{quotationData?.fname} {quotationData?.lname || ''}</Text>
-                <Text style={styles.companyDetails}>{quotationData?.company}</Text>
-                <Text style={styles.companyDetails}>{quotationData?.address}</Text>
+                <Text style={styles.companyDetails}>{quotationData?.company || quotationData?.user?.company || quotationData?.billing?.company}</Text>
+                {(quotationData?.billing?.address1 || quotationData?.user?.address) && <Text style={styles.companyDetails}>{(quotationData?.billing?.address1 || quotationData?.user?.address)}</Text>}
             </View>
             <View style={styles.companyHeader}>
                 <Text style={styles.companyName}>{salesOrder ? 'Sales Order' : 'Open Quote'}</Text>
@@ -191,10 +191,11 @@ const Header = ({ quotationData, headerData }) => {
                 <Text style={styles.companyDetails}>{salesOrder ? 'Order' : 'Quote'} Revision Date: {moment(quotationData?.updatedAt).format('DD-MM-YYYY')}</Text>
                 <Text style={styles.companyDetails}>Email: {quotationData?.email}</Text>
                 <Text style={styles.companyDetails}>Full Name:  {quotationData?.fname} {quotationData?.lname || ''}</Text>
-                <Text style={styles.companyDetails}>Company: {quotationData?.company}</Text>
+                <Text style={styles.companyDetails}>Company: {quotationData?.company || quotationData?.user?.company || quotationData?.billing?.company}</Text>
                 <Text style={styles.companyDetails}>Phone: {quotationData?.phone}</Text>
-                {quotationData?.country && <Text style={styles.companyDetails}>Country: {quotationData?.country}</Text>}
-                {quotationData?.zipcode && <Text style={styles.companyDetails}>State: {quotationData?.zipcode} </Text>}
+                {(quotationData?.billing?.state || quotationData?.user?.state) && <Text style={styles.companyDetails}>State: {(quotationData?.billing?.state || quotationData?.user?.state)} </Text>}
+                {(quotationData?.billing?.country || quotationData?.user?.country) && <Text style={styles.companyDetails}>Country: {(quotationData?.billing?.country || quotationData?.user?.country)}</Text>}
+                {(quotationData?.billing?.zipcode || quotationData?.user?.zipCode) && <Text style={styles.companyDetails}>ZipCode: {(quotationData?.billing?.zipcode || quotationData?.user?.zipCode)} </Text>}
             </View>
         </View>
     )
