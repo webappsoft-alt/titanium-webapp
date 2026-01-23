@@ -179,10 +179,12 @@ const Header = ({ quotationData, headerData }) => {
                 <Image style={styles.logo} src={headerData.companyLogo} />
                 <Text style={styles.companyDetails}>{headerData.companyEmail} | {headerData.companyPhone} </Text>
                 <Text style={styles.companyDetails}>{headerData.companyAddress}</Text>
-                <Text style={[styles.companyDetails, { marginTop: 10 }]}>Ship To:</Text>
-                <Text style={styles.companyDetails}>{quotationData?.fname} {quotationData?.lname || ''}</Text>
-                <Text style={styles.companyDetails}>{quotationData?.company || quotationData?.user?.company || quotationData?.billing?.company}</Text>
-                {(quotationData?.billing?.address1 || quotationData?.user?.address) && <Text style={styles.companyDetails}>{(quotationData?.billing?.address1 || quotationData?.user?.address)}</Text>}
+                {salesOrder && <>
+                    <Text style={[styles.companyDetails, { marginTop: 10 }]}>Ship To:</Text>
+                    <Text style={styles.companyDetails}>{quotationData?.fname} {quotationData?.lname || ''}</Text>
+                    <Text style={styles.companyDetails}>{quotationData?.company || quotationData?.user?.company || quotationData?.billing?.company}</Text>
+                    {(quotationData?.billing?.address1 || quotationData?.user?.address) && <Text style={styles.companyDetails}>{(quotationData?.billing?.address1 || quotationData?.user?.address)}</Text>}
+                </>}
             </View>
             <View style={styles.companyHeader}>
                 <Text style={styles.companyName}>{salesOrder ? 'Sales Order' : 'Open Quote'}</Text>
