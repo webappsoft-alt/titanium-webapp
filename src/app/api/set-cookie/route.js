@@ -14,7 +14,7 @@ export async function POST(req) {
       sameSite: "lax",
       priority: "high",
       path: "/",
-      maxAge: 7 * 60 * 60 * 24, // ⏱️ 7 days
+      maxAge: 60 * 60 * 24, // ⏱️ 7 days
     });
 
     return response;

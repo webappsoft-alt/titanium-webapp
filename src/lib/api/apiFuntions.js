@@ -13,13 +13,31 @@ const ApiFunction = () => {
     const { replace } = useRouter()
     // Track active requests to prevent duplicates
     const activeRequestsRef = useRef(new Map());
-
-    const handleUserLogout = () => {
+    const handleUserLogout = (message = 'Your session expired, please login') => {
         dispatch(setLogout());
         replace("/auth/login");
-        toast.info('Your session is expire, please login');
+        toast.info(message);
     };
+    const handleAuthError = (error) => {
+        const status = error?.response?.status;
 
+        if (!status) return;
+
+        // Session expired → force logout
+        if (status === 419) {
+            handleUserLogout('Your session has expired. Please login again.');
+        }
+
+        // No token / Unauthorized → force logout
+        else if (status === 401) {
+            handleUserLogout('Unauthorized. Please login.');
+        }
+
+        // Forbidden → permission denied (NO logout)
+        else if (status === 403) {
+            toast.error('You do not have permission to perform this action.');
+        }
+    };
     // Define headers
     const header1 = {
         "Content-Type": "application/json",
@@ -57,9 +75,7 @@ const ApiFunction = () => {
             .then((response) => decryptResponse(response?.data))
             .catch(error => {
                 console.error("Error in GET request:", error);
-                if (error?.response?.status === 401) {
-                    handleUserLogout();
-                }
+                handleAuthError(error);
                 // Remove from active requests on error
                 activeRequestsRef.current.delete(requestKey);
                 throw error;
@@ -98,9 +114,7 @@ const ApiFunction = () => {
             .then((response) => decryptResponse(response?.data))
             .catch(error => {
                 console.error("Error in POST request:", error);
-                if (error?.response?.status === 401) {
-                    handleUserLogout();
-                }
+                handleAuthError(error);
                 activeRequestsRef.current.delete(requestKey);
                 throw error;
             })
@@ -134,9 +148,7 @@ const ApiFunction = () => {
             .then((response) => decryptResponse(response?.data))
             .catch(error => {
                 console.error("Error in DELETE request:", error);
-                if (error?.response?.status === 401) {
-                    handleUserLogout();
-                }
+                handleAuthError(error);
                 activeRequestsRef.current.delete(requestKey);
                 throw error;
             })
@@ -169,9 +181,7 @@ const ApiFunction = () => {
             .then((response) => decryptResponse(response?.data))
             .catch(error => {
                 console.error("Error in PUT request:", error);
-                if (error?.response?.status === 401) {
-                    handleUserLogout();
-                }
+                handleAuthError(error);
                 activeRequestsRef.current.delete(requestKey);
                 throw error;
             })
