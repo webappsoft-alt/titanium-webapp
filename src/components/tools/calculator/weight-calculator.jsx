@@ -60,7 +60,7 @@ const DimensionInputs = ({ productForm, tolerance, register, diameterTol, length
           <div className="flex gap-2">
             <Input
               type="number"
-              step="0.01"
+              step="0.0001"
               placeholder="Enter diameter"
               className="flex-1"
               {...register('dimensions.diameter.value', {
@@ -88,7 +88,7 @@ const DimensionInputs = ({ productForm, tolerance, register, diameterTol, length
           <div className="flex gap-2">
             <Input
               type="number"
-              step="0.01"
+              step="0.0001"
               placeholder="Across Flats Hex Dimension"
               className="flex-1"
               {...register('dimensions.hexAF.value', {
@@ -116,7 +116,7 @@ const DimensionInputs = ({ productForm, tolerance, register, diameterTol, length
           <div className="flex gap-2">
             <Input
               type="number"
-              step="0.01"
+              step="0.0001"
               placeholder="Thickness"
               className="flex-1"
               {...register('dimensions.thickness.value', {
@@ -144,7 +144,7 @@ const DimensionInputs = ({ productForm, tolerance, register, diameterTol, length
           <div className="flex gap-2">
             <Input
               type="number"
-              step="0.01"
+              step="0.0001"
               placeholder="Width"
               className="flex-1"
               {...register('dimensions.width.value', {
@@ -173,7 +173,7 @@ const DimensionInputs = ({ productForm, tolerance, register, diameterTol, length
           <div className="flex gap-2">
             <Input
               type="number"
-              step="0.01"
+              step="0.0001"
               placeholder="Inside Diameter"
               className="flex-1"
               {...register('dimensions.insideDiameter.value', {
@@ -201,7 +201,7 @@ const DimensionInputs = ({ productForm, tolerance, register, diameterTol, length
           <div className="flex gap-2">
             <Input
               type="number"
-              step="0.01"
+              step="0.0001"
               placeholder="Wall Thickness"
               className="flex-1"
               {...register('dimensions.wallTickness.value', {
@@ -229,7 +229,7 @@ const DimensionInputs = ({ productForm, tolerance, register, diameterTol, length
           <div className="flex gap-2">
             <Input
               type="number"
-              step="0.01"
+              step="0.0001"
               placeholder="Outside Diameter"
               className="flex-1"
               {...register('dimensions.outsideDiameter.value', {
