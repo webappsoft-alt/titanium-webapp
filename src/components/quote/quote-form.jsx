@@ -492,7 +492,7 @@ export function QuoteForm() {
       return
     }
     let queryData = {
-      alloyFamily: { $in: selectedProduct?.product }
+      alloyFamily: { $in: [selectedProduct?.product] }
     }
     await get('tol-weigth/tol/specific', { queryItem: queryData })
       .then((result) => {

@@ -455,7 +455,7 @@ export function WeightCalculator() {
       return
     }
     let queryData = {
-      alloyFamily: { $in: selectedProductForm }
+      alloyFamily: { $in: [selectedProductForm] }
     }
     await get('tol-weigth/tol/specific', { queryItem: queryData })
       .then((result) => {
