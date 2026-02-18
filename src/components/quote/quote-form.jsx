@@ -866,6 +866,7 @@ export function QuoteForm() {
 
         const formData = new FormData();
         formData.append('pdf', blob, 'quotation.pdf');
+        formData.append('type', 'send-to-all');
 
         await put(`quotation/finalize-btn/${response?.quotation?._id}`, formData, { headers: header2 })
         toast.success(response?.message)
