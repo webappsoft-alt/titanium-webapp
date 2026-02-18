@@ -315,12 +315,8 @@ export function QuoteForm() {
     // Column C Primary Tolerance
     // const N3 = lengthTol
     const N3 = Number(toleranceData?.tolerance?.find(item => item?.label === "Primary Dim 1 Tolerance")?.value || 0)
-    console.log({ cutWidth })
     const lengthTol = alloyData?.length?.length > 0 ? getTolerance(M3, alloyData?.length || []) : null
     const widthTol = Number(cutWidth || 0) > 0 ? (alloyData?.width?.length > 0 ? getTolerance(M3, alloyData?.width || []) : null) : ''
-    console.log({ toleranceData })
-    console.log({ alloyData })
-    console.log({ widthTol, lengthTol })
     const O3 = cutWidth ? Number(cutWidth) : Number(toleranceData?.tolerance?.find(item => item?.label === "Width or Wall")?.value || 0)
     // Column F
     const P3 = widthTol ? Number(widthTol) : Number(toleranceData?.tolerance?.find(item => item?.label === "Secondary Dim 2 Tolerance")?.value || 0)
@@ -331,7 +327,6 @@ export function QuoteForm() {
 
     const r27MarginIdentifier = (toleranceData?.tolerance?.find(item => item?.label === "Used for Margin Identifier Excess, TISH 64, TIRD 64, TIPL 64, MM, Other Ti")?.value || 0)
 
-    console.log(Number(toleranceData?.tolerance?.find(item => item?.label === "Width or Wall")?.value || 0), 'ooooo3')
     const formulaValue = customCutFormula({ type: selectedProduct?.product, N3: N3, M3: M3, O3: O3, P3: P3 }) // column F8
 
     const surfaceTotal = cutWidth ? calculateCuttionPortionValue({
@@ -343,16 +338,7 @@ export function QuoteForm() {
       C15: M3,
       D15: P3,
     }) : (formulaValue * cuttingSq) // column F8
-    console.log({
-      I15: cuttingSq,
-      G15: formulaValue,
-      K15: Number(cutWidth),
-      M15: Number(cutLength),
-      N15: lengthTol,
-      C15: M3,
-      D15: P3,
-    })
-    console.log({ surfaceTotal })
+   
     const kerfValue = lengthTol // column G8
 
     // const weightCalData = calculateWeightWithoutHTML({
@@ -365,7 +351,6 @@ export function QuoteForm() {
     //   quantity: totalQuantity,
     //   withTolerance: true
     // })
-    console.log({ O3, P3 })
     const variableDef = formulaValue// cloumn c8
 
     const weightCalData = (variableDef * (Number(cutLength) + kerfValue) * density)
@@ -379,7 +364,6 @@ export function QuoteForm() {
 
     const krefLossTotalWithoutPrice = Number(density) * kerfValue * customCutFormula({ type: selectedProduct?.product, N3: N3, M3: M3 })
     // const krefLossTotal = price * krefLossTotalWithoutPrice // old value
-    console.log({ marginValue })
     const krefLossTotal = cutWidth ?
       calculateKrefLossWidthValue({
         G15: formulaValue,
@@ -400,25 +384,7 @@ export function QuoteForm() {
     const totalSellingValueIN = totalMetalPortionPerOrder + totalCuttingPortionPerOrder
     const totalUnitSellingPricePerPC = totalSellingValueIN / totalQuantity
 
-    console.table({ c8: variableDef, h8: Number(cutLength), g8: kerfValue, l8: density, m8: price, q8: marginValue, o8: krefSubTotal })
-
-    console.table({
-      variableDef,
-      cuttingSq,
-      surfaceTotal,
-      kerfValue,
-      pieceWeightLbs: weightCalData,
-      totalWeightLbs: totalWeightData,
-      krefLossTotal,
-      krefSubTotal,
-      r27MarginIdentifier,
-      marginValue,
-      totalCuttingPortionPerPC,
-      totalCuttingPortionPerOrder,
-      totalMetalPortionPerOrder,
-      totalSellingValueIN,
-      totalUnitSellingPricePerPC
-    })
+   
     return {
       variableDef,
       cuttingSq,
@@ -662,7 +628,19 @@ export function QuoteForm() {
       handleGetCart()
     }
   };
+  const getToleranceValue = (labelArr, addInches = true) => {
+    if (!toleranceData?.tolerance?.length) return "";
 
+    const item = toleranceData.tolerance.find((t) =>
+      labelArr.includes(t?.label?.trim())
+    );
+
+    const value = Number(item?.value);
+
+    if (!item?.value || isNaN(value)) return "";
+
+    return addInches ? `${value.toFixed(2)}"` : `${value}"`;
+  };
   const onSubmit = async (data) => {
     const isCustomCut = activeTab === 'custom'
     const nData = {
@@ -671,30 +649,26 @@ export function QuoteForm() {
       productForm: selectedProduct?.product,
       grade: selectedGrade?.gradeAlloy,
       type: grades?.[0]?.type,
-      cutLength: activeTab === 'stock' ? "" : data?.cutLength,
-      cutWidth: activeTab === 'stock' ? "" : data?.cutWidth || tolItemWidth,
+      cutLength: activeTab === "stock" ? "" : data?.cutLength,
+      cutWidth: activeTab === "stock" ? "" : data?.cutWidth || tolItemWidth,
       uom: isCustomCut ? "lb" : data?.uom,
-      quantity: activeTab === 'stock' ? data?.quantity : data?.customQuantity,
+      quantity: activeTab === "stock" ? data?.quantity : data?.customQuantity,
       specifications: selectedSpecification?.specification,
-      length: toleranceData
-        ? Number(
-          toleranceData.tolerance.find((item) => item?.label === "Length")
-            ?.value
-        )?.toFixed(2) + `"`
-        : "",
-      lengthTolerance: toleranceData
-        ? Number(
-          toleranceData.tolerance.find(
-            (item) => (item?.label === "Length Tolerance" || item?.label === 'Length\nTolerance' || item?.label === 'Length\r\nTolerance')
-          )?.value
-        ).toFixed(2) + `"`
-        : "",
-      primaryDimTol: toleranceData
-        ? toleranceData?.tolerance?.find(
-          (item) => item.label === "Primary Dim 1 Tolerance"
-        )?.value + `"`
-        : "",
+
+      length: getToleranceValue(["Length"]),
+
+      lengthTolerance: getToleranceValue([
+        "Length Tolerance",
+        "Length\nTolerance",
+        "Length\r\nTolerance",
+      ]),
+
+      primaryDimTol: getToleranceValue(
+        ["Primary Dim 1 Tolerance"],
+        false // don't use toFixed if you don't want decimals forced
+      ),
     };
+
     const uniqueID = generateNewUniqueID(nData);
     // if (activeTab === 'stock') {
     let priceLabel = "";
