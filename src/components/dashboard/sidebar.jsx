@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { motion } from "framer-motion";
 import {
   ChevronRight,
@@ -42,13 +42,24 @@ const Sidebar = ({ userPer, userData, children }) => {
   const params = new URLSearchParams(searchParams)
   const { get } = ApiFunction()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const validPath = [{ path: '/dashboard/customers/edit', name: 'customer' },
-  { path: '/dashboard/sales-order/', name: 'quote' },
-  { path: '/dashboard/open-quotes/', name: 'quote' },
-  { path: '/dashboard/close-quotes/', name: 'quote' },
-  ]
+  const validPath = [
+    { path: "/dashboard/customers/edit/", name: "customer" },
+    { path: "/dashboard/sales-order/", name: "quote" },
+    { path: "/dashboard/open-quotes/", name: "quote" },
+    { path: "/dashboard/close-quotes/", name: "quote" },
+  ];
 
-  const rightSideData = validPath.find(item => pathname.startsWith(item.path)) || null;
+  // derive once
+  const rightSideData = useMemo(() => {
+    return validPath.find(item => pathname.startsWith(item.path)) || null;
+  }, [pathname]);
+  const customerId = useMemo(() => {
+    if (rightSideData?.name !== "customer") return null;
+    return pathname.replace("/dashboard/customers/edit/", "");
+  }, [pathname, rightSideData]);
+
+  // prevent refetch same id
+  const lastFetchedId = useRef(null);
   let rightSidetabs = [...sidetabsData(rightSideData?.name)]
   // Toggle expand state for menu items
   const toggleExpand = (name) => {
@@ -75,8 +86,9 @@ const Sidebar = ({ userPer, userData, children }) => {
     const index = filteredTabs.findIndex((tab) => tab.path === currentPath);
     if (index !== -1) setSelectedIndex(index);
   }, [pathname, userPer]);
-  const handleGet = useCallback(async () => {
-    const id = pathname.replace('/dashboard/customers/edit/', '')
+  const handleGet = useCallback(async (id) => {
+    if (!id || lastFetchedId.current === id) return;
+    lastFetchedId.current = id;
     await get(`quotation/open-quote/${id}`)
       .then((result) => {
         // Check if the object already exists
@@ -94,8 +106,8 @@ const Sidebar = ({ userPer, userData, children }) => {
       });
   }, [rightSideData])
   useEffect(() => {
-    if (rightSideData?.name === 'customer') {
-      handleGet()
+    if (rightSideData?.name === "customer" && customerId) {
+      handleGet(customerId)
     } else {
       const existingTab = rightSidetabs.find(tab => tab.name === "Open Quote");
 
@@ -103,6 +115,7 @@ const Sidebar = ({ userPer, userData, children }) => {
       if (existingTab) {
         rightSidetabs = rightSidetabs.filter(tab => tab.name !== "Open Quote");
       }
+      lastFetchedId.current = null;
     }
   }, [rightSideData]);
   const quoteButtonRef = useRef();
