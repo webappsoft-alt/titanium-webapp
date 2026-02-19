@@ -127,8 +127,12 @@ export function AdminQuotesPage() {
       id: 'email', // A unique ID for this column
       header: 'Email',
       cell: (info) => {
-        const { email, _id } = info.row.original?.user; // Access the original row data
-        return <Link className='underline text-blue-700 font-medium' href={`/dashboard/customers/edit/${_id}`}> {email} </Link>
+        const { email, _id, } = info.row.original?.user; // Access the original row data
+        const {  sentEmail } = info.row.original; // Access the original row data
+        return <div>
+          <Link className='underline text-blue-700 font-medium' href={`/dashboard/customers/edit/${_id}`}> {email} </Link>
+          {sentEmail?.finalizeBtn && <Badge variant='success' className={'px-1 rounded-lg'}>Finalized By User</Badge>}
+        </div>
       },
     }),
     columnHelper.display({
