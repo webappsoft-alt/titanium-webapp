@@ -1,11 +1,12 @@
 import { CheckRouting } from "@/vite-pages/auth/routing-check"
 
+
 const Page = () => {
-    return (
-        <>
-            <CheckRouting />
-        </>
-    )
+  return (
+    <>
+      <CheckRouting />
+    </>
+  )
 }
 
 export default Page

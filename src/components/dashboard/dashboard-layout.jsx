@@ -105,6 +105,7 @@ export function DashboardLayout({ children }) {
         { name: "Tolerance Weight", path: "tolerance-weight" },
         { name: "Category Management", path: "category-management" },
         { name: "Home Section Cards", path: "home-section" },
+        { name: "Check Branch", path: "check-branch" },
       ],
     },
     {
