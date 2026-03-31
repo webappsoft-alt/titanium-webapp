@@ -38,7 +38,7 @@ export function SigninForm({ isModal = false }) {
 
     const onSubmit = async (data) => {
         setIsLoading(true);
-        await post('auth', data)
+        await post('auth', { ...data, email: data.email?.toLowerCase() })
             .then(async (result) => {
                 if (result.success) {
                     toast.success('Login Successfully')

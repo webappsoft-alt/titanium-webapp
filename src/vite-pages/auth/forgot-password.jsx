@@ -34,7 +34,7 @@ export function ForgotPassword() {
 
   const onSubmit = async (data) => {
     setIsLoading(true);
-    post('users/forget-password', data)
+    post('users/forget-password', { ...data, email: data.email?.toLowerCase() })
       .then((result) => {
         if (result.success) {
           toast.success(result.message)
