@@ -223,3 +223,8 @@
         font-weight: 700;
     }
 }
+@media (width >=1540px) {
+  .container {
+    max-width: 1700px;
+  }
+}
