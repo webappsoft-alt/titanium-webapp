@@ -1459,7 +1459,7 @@ export function QuoteForm() {
                             }
                             value={quantityData?.[index]}
                           />{" "}
-                          PCS
+                          {item?.uom?.includes('lb') ? 'PCS' : item?.uom?.includes('inch') ? 'in' : item?.uom}
                           {/* {item?.uom === 'lb' ? 'lb.' : item?.uom === 'ft' ? 'ft.' : item?.uom === 'inch' && 'in.'}{" "} */}
                         </div>
                       </TableCell>

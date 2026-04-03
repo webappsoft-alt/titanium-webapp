@@ -225,7 +225,7 @@ export function CheckoutPage() {
                             <TableCell>{item?.alloyFamily}, {item?.productForm}, {item?.primaryDimension} {item?.lengthTolerance ? `±${item?.lengthTolerance}` : ""} <br />  {item?.identifier === 'Excess' ? <span className='text-danger'>Clearance  <br /> <Link href={'/customer/discounted-products'} className='text-danger underline' >View more Clearance items here</Link> </span> : ""} </TableCell>
                             <TableCell>{item?.grade} </TableCell>
                             <TableCell>{item?.specifications} </TableCell>
-                            <TableCell>{item?.quantity} PCS
+                            <TableCell>{item?.quantity} {item?.uom?.includes('lb') ? 'PCS' : item?.uom?.includes('inch') ? 'in' : item?.uom}
                               {/* {item?.uom === 'lb' ? 'lb.' : item?.uom === 'ft' ? 'ft.' : item?.uom === 'inch' && 'in.'} */}
                             </TableCell>
                             <TableCell>${Number(item?.prices?.price).toFixed(2)} </TableCell>
