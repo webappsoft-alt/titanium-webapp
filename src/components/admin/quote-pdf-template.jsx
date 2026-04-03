@@ -86,22 +86,23 @@ const styles = StyleSheet.create({
         fontSize: 10,
     },
     totalValue: {
-        width: '24%',
+        width: '28%',
         display: 'flex',
         justifyContent: 'flex-end',
         marginLeft: 'auto'
-    }, itemCol: { width: '24%' },
-    specCol: { width: '40%' },
-    qtyCol: { width: '7%' },
-    uomCol: { width: '7%' },
-    rateCol: { width: '12%' },
-    amountCol: { width: '10%' },
+    },
+    itemCol: { width: '22%' },
+    specCol: { width: '38%' },
+    qtyCol: { width: '5%', textAlign: 'right' },
+    uomCol: { width: '5%', textAlign: 'right' },
+    rateCol: { width: '16%', textAlign: 'right' },
+    amountCol: { width: '14%', textAlign: 'right' },
     total: {
         paddingRight: 10,
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'flex-end',
-        alignItems: 'center'
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     totalFSize: {
         fontSize: 10,
@@ -212,6 +213,9 @@ const Footer = ({ headerData }) => (
         <Text style={styles.companyDetails}>{headerData.companyAddress}</Text>
     </View>
 );
+const formatCurrency = (value) =>
+    Number(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
 const QuotationPDFTemplate = ({ quotationData }) => {
     const headerData = {
         companyLogo: '/assets/logo.png', // Replace with your logo path
@@ -270,10 +274,10 @@ const QuotationPDFTemplate = ({ quotationData }) => {
                                     <Text>{item?.uom?.includes('lb') ? 'PCS' : item?.uom?.includes('inch') ? 'in' : item?.uom}</Text>
                                 </View>
                                 <View style={[styles.tableCell, styles.rateCol]}>
-                                    <Text>${Number(item?.prices?.price).toFixed(2)}/ {item?.uom?.includes('lb') ? 'PCS' : item?.uom?.includes('inch') ? 'in' : item?.uom}</Text>
+                                    <Text>${formatCurrency(item?.prices?.price)}/{item?.uom?.includes('lb') ? 'PCS' : item?.uom?.includes('inch') ? 'in' : item?.uom}</Text>
                                 </View>
                                 <View style={[styles.tableCell, styles.amountCol]}>
-                                    <Text>${(Number(item?.prices?.price) * Number(item?.quantity)).toFixed(2)}</Text>
+                                    <Text>${formatCurrency(Number(item?.prices?.price) * Number(item?.quantity))}</Text>
                                 </View>
                             </View>
                         ))}
@@ -283,21 +287,17 @@ const QuotationPDFTemplate = ({ quotationData }) => {
                     <View style={[styles.totalValue]}>
                         {quotationData?.frieght > 0 && <>
                             <View style={[styles.total, styles.totalBorder]}>
-                                <Text style={[styles.companyDetails, styles.totalFSize]}> Subtotal: </Text>
-                                <Text style={[styles.totalFSize]} >${(quotationData?.subtotal)?.toFixed(2)}</Text>
+                                <Text style={[styles.companyDetails, styles.totalFSize]}>Subtotal:</Text>
+                                <Text style={[styles.totalFSize]}>${formatCurrency(quotationData?.subtotal)}</Text>
                             </View>
                             <View style={[styles.total, styles.totalBorder]}>
-                                <Text style={[styles.companyDetails, styles.totalFSize]}> Frieght: </Text>
-                                <Text style={[styles.totalFSize]} >${quotationData?.frieght}</Text>
+                                <Text style={[styles.companyDetails, styles.totalFSize]}>Freight:</Text>
+                                <Text style={[styles.totalFSize]}>${formatCurrency(quotationData?.frieght)}</Text>
                             </View>
                         </>}
-                        {/* <View style={[styles.total, styles.totalBorder]}>
-              <Text style={[styles.companyDetails, styles.totalFSize]}> Tax: </Text>
-              <Text style={[styles.totalFSize]} >${quotationData?.tax}</Text>
-            </View> */}
                         <View style={[styles.total, styles.totalBorder]}>
-                            <Text style={[styles.companyDetails, styles.totalFSize]}> Order Total: </Text>
-                            <Text style={[styles.totalFSize]} >${quotationData?.totalAmount}</Text>
+                            <Text style={[styles.companyDetails, styles.totalFSize]}>Order Total:</Text>
+                            <Text style={[styles.totalFSize]}>${formatCurrency(quotationData?.totalAmount)}</Text>
                         </View>
                     </View>
                     <View style={styles.termsContainer}>

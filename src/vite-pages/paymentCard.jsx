@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { handleError } from '@/lib/api/errorHandler';
 import { RadioButton } from '@/components/ui/radioButton';
 import QuotationPDFTemplate from '@/components/admin/quote-pdf-template';
-import { useRouter } from 'next/navigation';
 
 // Validation schema for address fields
 const schema = (isInvoice) => z.object({
@@ -29,12 +28,12 @@ const paymentMethodOption = [
 ]
 export function PaymentCard({ setIsActive, quoteData }) {
     const [isLoading, setIsLoading] = useState(false);
+    const [orderPlaced, setOrderPlaced] = useState(false);
     const userData = useSelector(state => state.auth.userData)
     const checkoutData = useSelector(state => state.checkout.checkoutData)
     const { post, put, header2 } = ApiFunction()
     const [isInvoice, setIsInvoice] = useState(false);
     const dispatch = useDispatch()
-    const { push } = useRouter()
     const {
         control,
         handleSubmit,
@@ -68,7 +67,7 @@ export function PaymentCard({ setIsActive, quoteData }) {
 
                 await put(`quotation/resend/${response?.quotation?._id}/sales-cart`, formData, { headers: header2 })
                 toast.success(response?.message)
-                push('/quick-quote')
+                setOrderPlaced(true)
             }
         } catch (error) {
             console.log(error)
@@ -228,14 +227,22 @@ export function PaymentCard({ setIsActive, quoteData }) {
                 </div>
             </div>
 
-            <div className='flex gap-3 items-center'>
-                <Button type="submit" className="" disabled={isLoading}>
-                    {isLoading ? 'Finish Quote...' : 'Finish Quote'}
-                </Button>
-                <Button type="button" variant='outline' className="" onClick={() => setIsActive('2')} disabled={isLoading}>
-                    {'Previous'}
-                </Button>
-            </div>
+            {orderPlaced && (
+                <div className="rounded-md border border-green-300 bg-green-50 p-4 text-green-800 text-sm">
+                    Thank you for your order. Please check your email for your sales order summary. A sales representative will follow up with you to complete processing.
+                </div>
+            )}
+
+            {!orderPlaced && (
+                <div className='flex gap-3 items-center'>
+                    <Button type="submit" className="" disabled={isLoading}>
+                        {isLoading ? 'Place Order...' : 'Place Order'}
+                    </Button>
+                    <Button type="button" variant='outline' className="" onClick={() => setIsActive('2')} disabled={isLoading}>
+                        {'Previous'}
+                    </Button>
+                </div>
+            )}
         </form>
     );
 }
