@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronRight,
   ChevronDown,
@@ -45,6 +45,22 @@ const Sidebar = ({ userPer, userData, children }) => {
   const params = new URLSearchParams(searchParams)
   const { get } = ApiFunction()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const mobileMenuRef = useRef(null);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const handleClickOutside = (e) => {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(e.target)) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [openFlyout, setOpenFlyout] = useState(null);
@@ -133,71 +149,74 @@ const Sidebar = ({ userPer, userData, children }) => {
   return (
     <>
       {/* 📱 Mobile SidebarLayout */}
-      <div className="lg:hidden mb-6 relative">
+      <div className="lg:hidden mb-6 relative" ref={mobileMenuRef}>
         <button
           className="w-full flex justify-between items-center px-4 py-3 bg-white rounded-lg shadow"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          onClick={() => setIsMobileMenuOpen((prev) => !prev)}
         >
           <span>{filteredTabs[selectedIndex]?.name || "Menu"}</span>
           <Menu className="h-5 w-5" />
         </button>
 
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="absolute left-0 right-0 mt-2 p-2 bg-white shadow-lg rounded-lg z-50"
-          >
-            {filteredTabs.map((tab, index) => (
-              <div key={index}>
-                {/* Parent Item */}
-                <button
-                  className={`w-full flex items-center justify-between px-4 py-3 rounded-md text-sm font-medium ${pathname.includes(tab.path)
-                    ? "bg-blue-50 text-blue-600"
-                    : "text-gray-600 hover:bg-gray-50"
-                    }`}
-                  onClick={() => {
-                    if (tab.children) {
-                      toggleExpand(tab.name); // Toggle children visibility
-                    } else {
-                      handleTabChange(tab.path); // Navigate if no children
-                    }
-                  }}
-                >
-                  <div className="flex items-center space-x-3">
-                    <tab.icon className="h-5 w-5" />
-                    <span>{tab.name}</span>
-                  </div>
-                  {tab.children &&
-                    (expanded[tab.name] ? (
-                      <ChevronDown className="h-4 w-4" />
-                    ) : (
-                      <ChevronRight className="h-4 w-4" />
-                    ))}
-                </button>
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.15 }}
+              className="absolute left-0 right-0 mt-2 p-2 bg-white shadow-lg rounded-lg z-50"
+            >
+              {filteredTabs.map((tab, index) => (
+                <div key={index}>
+                  {/* Parent Item */}
+                  <button
+                    className={`w-full flex items-center justify-between px-4 py-3 rounded-md text-sm font-medium ${pathname.includes(tab.path)
+                      ? "bg-blue-50 text-blue-600"
+                      : "text-gray-600 hover:bg-gray-50"
+                      }`}
+                    onClick={() => {
+                      if (tab.children) {
+                        toggleExpand(tab.name); // Toggle children visibility
+                      } else {
+                        handleTabChange(tab.path); // Navigate if no children
+                      }
+                    }}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <tab.icon className="h-5 w-5" />
+                      <span>{tab.name}</span>
+                    </div>
+                    {tab.children &&
+                      (expanded[tab.name] ? (
+                        <ChevronDown className="h-4 w-4" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4" />
+                      ))}
+                  </button>
 
-                {/* Child Items */}
-                {tab.children && expanded[tab.name] && (
-                  <div className="ml-6 space-y-2">
-                    {tab.children.map((child, childIndex) => (
-                      <button
-                        key={childIndex}
-                        className={`w-full flex items-center gap-3 px-4 py-2 rounded-md text-sm font-medium ${pathname.includes(child.path)
-                          ? "text-blue-600 bg-blue-50"
-                          : "text-gray-600 hover:bg-gray-50"
-                          }`}
-                        onClick={() => handleTabChange(child.path)}
-                      >
-                        <span>•</span> {child.name}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </motion.div>
-        )}
+                  {/* Child Items */}
+                  {tab.children && expanded[tab.name] && (
+                    <div className="ml-6 space-y-2">
+                      {tab.children.map((child, childIndex) => (
+                        <button
+                          key={childIndex}
+                          className={`w-full flex items-center gap-3 px-4 py-2 rounded-md text-sm font-medium ${pathname.includes(child.path)
+                            ? "text-blue-600 bg-blue-50"
+                            : "text-gray-600 hover:bg-gray-50"
+                            }`}
+                          onClick={() => handleTabChange(child.path)}
+                        >
+                          <span>•</span> {child.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
       {/* 🖥️ Desktop SidebarLayout */}
       <div className="grid lg:grid-cols-12 gap-6">
@@ -375,10 +394,10 @@ const Sidebar = ({ userPer, userData, children }) => {
         )}
         <div
           className={`${isExpanded
-              ? "lg:col-span-12"
-              : rightSideData
-                ? isSidebarCollapsed ? "lg:col-span-9 xl:col-span-9" : "xl:col-span-8 lg:col-span-7 md:col-span-9"
-                : isSidebarCollapsed ? "lg:col-span-11 xl:col-span-11" : "xl:col-span-10 lg:col-span-9"
+            ? "lg:col-span-12"
+            : rightSideData
+              ? isSidebarCollapsed ? "lg:col-span-9 xl:col-span-9" : "xl:col-span-8 lg:col-span-7 md:col-span-9"
+              : isSidebarCollapsed ? "lg:col-span-11 xl:col-span-11" : "xl:col-span-10 lg:col-span-9"
             } overflow-x-auto`}
         >
           <div className="rounded-lg bg-white p-2 md:p-6 shadow-sm w-full relative">
