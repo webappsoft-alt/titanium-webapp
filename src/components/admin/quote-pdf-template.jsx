@@ -271,10 +271,10 @@ const QuotationPDFTemplate = ({ quotationData }) => {
                                     <Text>{item?.quantity}</Text>
                                 </View>
                                 <View style={[styles.tableCell, styles.uomCol]}>
-                                    <Text>{item?.uom?.includes('lb') ? 'PCS' : item?.uom?.includes('inch') ? 'in' : item?.uom}</Text>
+                                    <Text>{(item?.cutLength || item?.cutWidth) ? 'PCS' : item?.uom === 'lb' ? 'lb.' : item?.uom === 'ft' ? 'ft' : item?.uom === 'inch' ? 'in' : item?.uom}</Text>
                                 </View>
                                 <View style={[styles.tableCell, styles.rateCol]}>
-                                    <Text>${formatCurrency(item?.prices?.price)}/{item?.uom?.includes('lb') ? 'PCS' : item?.uom?.includes('inch') ? 'in' : item?.uom}</Text>
+                                    <Text>${formatCurrency(item?.prices?.price)}/{(item?.cutLength || item?.cutWidth) ? 'PCS' : item?.uom === 'lb' ? 'lb.' : item?.uom === 'ft' ? 'ft' : item?.uom === 'inch' ? 'in' : item?.uom}</Text>
                                 </View>
                                 <View style={[styles.tableCell, styles.amountCol]}>
                                     <Text>${formatCurrency(Number(item?.prices?.price) * Number(item?.quantity))}</Text>
