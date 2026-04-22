@@ -17,16 +17,9 @@ import Select from 'react-select'
 import { useDispatch, useSelector } from 'react-redux';
 import { setCustomerData, setRolesList } from '@/lib/redux/products';
 import { usePathname, useRouter } from 'next/navigation';
+import { customerStatusOptions } from '@/lib/utils';
 // Validation schema
 const industry = ["Aerospace", "Defense", "Industrial", "Medical", "Oil / Gas", "Other"]
-const customerStatusOptions = [
-    { label: "Customer", value: "C" },
-    { label: "Lost Customer", value: "L" },
-    { label: "Prospect", value: "P" },
-    { label: "Inactive Customer", value: "I" },
-    { label: "3 Month Dormant", value: "3MD" },
-    { label: "6 Month Dormant", value: "6MD" },
-];
 
 const keyValueSchema = z.object({
     label: z.string().optional(),

@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import ApiFunction from "@/lib/api/apiFuntions";
+import { customerStatusOptions } from "@/lib/utils";
 import exportToExcel from "@/lib/utils/exportCustomerExcel";
 import moment from "moment";
 import React, { useCallback, useState } from "react";
@@ -15,36 +16,41 @@ const QuickQuoteReport = () => {
       .then((result) => {
         if (result.success) {
           const quoteData = result.quotations;
-          const data = quoteData.map((quote) => ({
-            ID: quote?._id,
-            created_at: moment(quote?.createdTS || quote?.createdAt).format("l"),
-            updated_at: moment(quote?.updatedAt).format("l"),
-            number: quote?.type == 'cart' ? quote?.orderNo : quote?.quoteNo,
-            status: quote?.status === "closed" ? "archived" : quote?.status,
-            closed_reason: quote?.closedReason || '',
+          const data = quoteData.map((quote) => {
+            const user = quote?.user
+            const customerStatusData = user?.customerStatus ? customerStatusOptions.find(item => (item.value === user?.customerStatus)) : {}
 
-            company: quote?.company,
-            stratix_account: quote?.user?.stratixAccount,
-            user_id: quote?.user?._id,
-            customerStatus: quote?.user?.customerStatus || '',
-            email: quote?.email,
-            full_name: `${quote?.fname} ${quote?.lname || ""}`,
-            phone: quote?.phone,
-            account_manager: quote?.user?.accountManager?.email || "",
-            regional_manager: quote?.user?.regionalManager?.email || "",
-            salesRep: quote?.user?.salesRep?.email || "",
-            branch: quote?.user?.assignBranch?.code || "",
+            return ({
+              ID: quote?._id,
+              created_at: moment(quote?.createdTS || quote?.createdAt).format("l"),
+              updated_at: moment(quote?.updatedAt).format("l"),
+              number: quote?.type == 'cart' ? quote?.orderNo : quote?.quoteNo,
+              status: quote?.status === "closed" ? "archived" : quote?.status,
+              closed_reason: quote?.closedReason || '',
 
-            item_total: quote?.totalAmount,
-            total: quote?.totalAmount,
-            adjustment_total: 0,
-            bill_address_id: quote?.address1,
-            ship_address_id: quote?.address1,
-            payment_total: 0,
-            shipment_state: "",
-            payment_state: "",
-            special_instructions: quote?.notes,
-          }));
+              company: quote?.company,
+              stratix_account: quote?.user?.stratixAccount,
+              user_id: quote?.user?._id,
+              customerStatus: customerStatusData?.label || '',
+              email: quote?.email,
+              full_name: `${quote?.fname} ${quote?.lname || ""}`,
+              phone: quote?.phone,
+              account_manager: quote?.user?.accountManager?.email || "",
+              regional_manager: quote?.user?.regionalManager?.email || "",
+              salesRep: quote?.user?.salesRep?.email || "",
+              branch: quote?.user?.assignBranch?.code || "",
+
+              item_total: quote?.totalAmount,
+              total: quote?.totalAmount,
+              adjustment_total: 0,
+              bill_address_id: quote?.address1,
+              ship_address_id: quote?.address1,
+              payment_total: 0,
+              shipment_state: "",
+              payment_state: "",
+              special_instructions: quote?.notes,
+            })
+          });
           exportToExcel({ data: data, name: "quick_quote_activity" });
         }
       })

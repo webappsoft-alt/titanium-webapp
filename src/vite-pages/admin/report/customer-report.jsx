@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import ApiFunction from '@/lib/api/apiFuntions';
+import { customerStatusOptions } from '@/lib/utils';
 import exportToExcel from '@/lib/utils/exportCustomerExcel';
 import moment from 'moment';
 import React, { useCallback, useState } from 'react'
@@ -17,34 +18,39 @@ const CustomerReport = () => {
         if (result.success) {
           // Define the data
           const users = result.users
-          const data = users.map(user => ({
-            ID: user?._id,
-            company: user?.company,
-            stratixAccount: user?.stratixAccount,
-            email: user?.email,
-            full_name: `${user?.fname} ${user?.lname || ''}`,
-            phone: user?.phone,
-            competitor: user?.isCompetitor ? 'TRUE' : 'FALSE',
-            industry: user?.industry,
-            otherIndustry: user?.otherIndustry,
-            country: user?.country,
-            state: user?.state,
-            createdAt: moment(user?.createdAt).format('lll'),
-            updatedAt: moment(user?.updatedAt).format('lll'),
-            status: user?.status === 'inactive' ? 'TRUE' : 'FALSE',
-            login: user?.email,
-            address: user?.address,
-            city: user?.city,
-            zipCode: user?.zipCode,
-            discount: user?.discount,
-            accountManager: user?.accountManager?.email || '',
-            regionalManager: user?.regionalManager?.email || '',
-            salesRep: user?.salesRep?.email || '',
-            branch: user?.assignBranch?.code || '',
-            termConditions: user?.isAcceptTerms ? 'TRUE' : 'FALSE',
-            promotionEmails: user?.isAcceptSendOffers ? 'TRUE' : 'FALSE',
-            taxLicense: user?.isTaxLicense ? 'TRUE' : 'FALSE',
-          }));
+          const data = users.map(user => {
+            const customerStatusData = user?.customerStatus ? customerStatusOptions.find(item => (item.value === user?.customerStatus)) : {}
+
+            return ({
+              ID: user?._id,
+              company: user?.company,
+              stratixAccount: user?.stratixAccount,
+              email: user?.email,
+              full_name: `${user?.fname} ${user?.lname || ''}`,
+              phone: user?.phone,
+              competitor: user?.isCompetitor ? 'TRUE' : 'FALSE',
+              customerStatus: customerStatusData?.label || '',
+              industry: user?.industry,
+              otherIndustry: user?.otherIndustry,
+              country: user?.country,
+              state: user?.state,
+              createdAt: moment(user?.createdAt).format('lll'),
+              updatedAt: moment(user?.updatedAt).format('lll'),
+              status: user?.status === 'inactive' ? 'TRUE' : 'FALSE',
+              login: user?.email,
+              address: user?.address,
+              city: user?.city,
+              zipCode: user?.zipCode,
+              discount: user?.discount,
+              accountManager: user?.accountManager?.email || '',
+              regionalManager: user?.regionalManager?.email || '',
+              salesRep: user?.salesRep?.email || '',
+              branch: user?.assignBranch?.code || '',
+              termConditions: user?.isAcceptTerms ? 'TRUE' : 'FALSE',
+              promotionEmails: user?.isAcceptSendOffers ? 'TRUE' : 'FALSE',
+              taxLicense: user?.isTaxLicense ? 'TRUE' : 'FALSE',
+            })
+          });
           exportToExcel({ data: data, name: 'all_users' })
         }
       }).catch((err) => {
