@@ -70,4 +70,4 @@ export const dimensionTolerances = {
   }
 };
 
-export const newMetalFamily = ['Titanium', 'Nickel Alloy', 'Stainless Steel', 'Cobalt Chrome', 'Alloy Steel', 'Aluminum', 'Carbon Steel', 'Tool Steel']
+export const newMetalFamily = ['Titanium', 'Nickel Alloy', 'Stainless Steel', 'Cobalt Chrome', 'Alloy Steel', 'Aluminum', 'Aluminum Alloy', 'Carbon Steel', 'Tool Steel']

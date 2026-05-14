@@ -438,7 +438,6 @@ export function WeightCalculator() {
   const insideDiameterTol = alloyData?.outsideDiameter?.length > 0 ? getTolerance(outsideDiameterValue, alloyData?.outsideDiameter || [], outsideDiameterUnit) : null
   const wallTicknessTol = alloyData?.wallTickness?.length > 0 ? getTolerance(wallTicknessValue, alloyData?.wallTickness || [], wallTicknessUnit) : null
   const outsideDiameterTol = alloyData?.insideDiameter?.length > 0 ? getTolerance(insideDiameterValue, alloyData?.insideDiameter || [], insideDiameterUnit) : null
-
   const fetchMetalFamily = async () => {
     await get('density/specific')
       .then((result) => {
