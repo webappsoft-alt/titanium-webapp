@@ -29,10 +29,10 @@ export function TitaniumUserForm({ rowData }) {
         fname: z.string({ required_error: 'First name is required' }).optional(),
         phone: z.string({ required_error: 'Phone Number is required' }).optional(),
         email: z.string({ required_error: 'Email is required' }).email('Invalid email address'),
-        password: password ? z.string({ required_error: 'Password is required' }).min(8, 'Password must be at least 8 characters') : z.string().optional(),
-        confirmPassword: password ? z.string({ required_error: 'Confirm Password is required' }) : z.string().optional(),
+        password: (!rowData || password) ? z.string({ required_error: 'Password is required' }).min(8, 'Password must be at least 8 characters') : z.string().optional(),
+        confirmPassword: (!rowData || password) ? z.string({ required_error: 'Confirm Password is required' }) : z.string().optional(),
     }).refine((data) => {
-        if (password) {
+        if (!rowData || password) {
             return data.password === data.confirmPassword;
         }
         return true;
