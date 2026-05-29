@@ -256,7 +256,7 @@ const QuotationPDFTemplate = ({ quotationData }) => {
                         {quotationData?.quote?.map((item, index) => (
                             <View key={index} style={styles.tableRow}>
                                 <View style={[styles.tableCell, styles.itemCol]}>
-                                    <Text>{item?.alloyFamily}, {item?.productForm}, {item?.primaryDimension} {(item?.lengthTolerance && item?.lengthTolerance !== 'NaN\"') ? `±${item?.lengthTolerance}` : ""}</Text>
+                                    <Text>{item?.alloyFamily}, {item?.productForm} {item?.grade}, {item?.primaryDimension} {(item?.lengthTolerance && item?.lengthTolerance !== 'NaN\"') ? `${item?.primaryDimTol} ±${item?.lengthTolerance}` : ""}</Text>
                                     {item?.cutLength ? <Text>
                                         Custom Cut Length: {item?.cutLength}"
                                     </Text> : ""}{" "}
