@@ -9,6 +9,9 @@ Font.register({
         { src: `/arial-font/arial.ttf`, fontWeight: 'normal' },
     ]
 });
+function removeDoubleQuotes(str) {
+  return str.replace(/"/g, '');
+}
 
 const styles = StyleSheet.create({
     page: {
@@ -256,7 +259,7 @@ const QuotationPDFTemplate = ({ quotationData }) => {
                         {quotationData?.quote?.map((item, index) => (
                             <View key={index} style={styles.tableRow}>
                                 <View style={[styles.tableCell, styles.itemCol]}>
-                                    <Text>{item?.alloyFamily} {item?.productForm}, Alloy {item?.grade}, {item?.primaryDimension} {(item?.primaryDimTol && item?.primaryDimTol !== 'NaN\"') ? `±${item?.primaryDimTol}` : ""}</Text>
+                                    <Text>{item?.alloyFamily} {item?.productForm}, Alloy {item?.grade}, {removeDoubleQuotes(item?.primaryDimension)} {(item?.primaryDimTol && item?.primaryDimTol !== 'NaN\"') ? `±${item?.primaryDimTol}` : ""}</Text>
                                     {item?.cutLength ? <Text>
                                         Custom Cut Length: {item?.cutLength}"
                                     </Text> : ""}{" "}
