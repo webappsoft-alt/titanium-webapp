@@ -91,11 +91,11 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         marginLeft: 'auto'
     },
-    itemCol: { width: '22%' },
-    specCol: { width: '38%' },
+    itemCol: { width: '25%' },
+    specCol: { width: '36%' },
     qtyCol: { width: '5%', textAlign: 'right' },
     uomCol: { width: '5%', textAlign: 'right' },
-    rateCol: { width: '16%', textAlign: 'right' },
+    rateCol: { width: '15%', textAlign: 'right' },
     amountCol: { width: '14%', textAlign: 'right' },
     total: {
         paddingRight: 10,
@@ -256,7 +256,7 @@ const QuotationPDFTemplate = ({ quotationData }) => {
                         {quotationData?.quote?.map((item, index) => (
                             <View key={index} style={styles.tableRow}>
                                 <View style={[styles.tableCell, styles.itemCol]}>
-                                    <Text>{item?.alloyFamily} {item?.productForm}, {item?.grade}, {item?.primaryDimension} {(item?.primaryDimTol && item?.primaryDimTol !== 'NaN\"') ? `±${item?.primaryDimTol}` : ""}</Text>
+                                    <Text>{item?.alloyFamily} {item?.productForm}, Alloy {item?.grade}, {item?.primaryDimension} {(item?.primaryDimTol && item?.primaryDimTol !== 'NaN\"') ? `±${item?.primaryDimTol}` : ""}</Text>
                                     {item?.cutLength ? <Text>
                                         Custom Cut Length: {item?.cutLength}"
                                     </Text> : ""}{" "}
