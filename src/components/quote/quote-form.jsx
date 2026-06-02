@@ -628,6 +628,8 @@ export function QuoteForm() {
       handleGetCart()
     }
   };
+  console.log(toleranceData)
+ 
   const getToleranceValue = (labelArr, addInches = true) => {
     if (!toleranceData?.tolerance?.length) return "";
 
@@ -665,6 +667,10 @@ export function QuoteForm() {
 
       primaryDimTol: getToleranceValue(
         ["Primary Dim 1 Tolerance"],
+        false // don't use toFixed if you don't want decimals forced
+      ),
+      secondaryTol: getToleranceValue(
+        ["Secondary Dim 2 Tolerance"],
         false // don't use toFixed if you don't want decimals forced
       ),
     };

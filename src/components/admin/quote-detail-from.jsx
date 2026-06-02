@@ -265,7 +265,8 @@ export function QuoteDetailForm() {
       uom: activeTab === 'stock' ? data?.uom : 'inch',
       length: toleranceData ? (Number(toleranceData.tolerance.find(item => item?.label === "Length")?.value))?.toFixed(2) + `"` : '',
       lengthTolerance: toleranceData ? (Number(toleranceData.tolerance.find(item => (item?.label === "Length\nTolerance" || item?.label === 'Length\r\nTolerance'))?.value)).toFixed(2) + `"` : '',
-      primaryDimTol: toleranceData ? (toleranceData?.tolerance?.find((item) => item.label === 'Primary Dim 1 Tolerance')?.value) + `"` : ''
+      primaryDimTol: toleranceData ? (toleranceData?.tolerance?.find((item) => item.label === 'Primary Dim 1 Tolerance')?.value) + `"` : '',
+      secondaryTol: toleranceData ? (toleranceData?.tolerance?.find((item) => item.label === 'Secondary Dim 2 Tolerance')?.value) + `"` : ''
     }
     const uniqueID = generateNewUniqueID(nData)
     // if (activeTab === 'stock') {
