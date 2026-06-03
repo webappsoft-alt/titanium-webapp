@@ -1,7 +1,7 @@
 import axios from "axios"
 
-// export const baseURL = 'https://api.titanium.com/api/'
-export const baseURL = 'http://localhost:5004/api/'
+export const baseURL = 'https://api.titanium.com/api/'
+// export const baseURL = 'http://localhost:5004/api/'
 
 export const axiosInstance = axios.create({
   baseURL: baseURL

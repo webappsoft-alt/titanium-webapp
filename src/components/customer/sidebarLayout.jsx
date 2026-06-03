@@ -12,7 +12,7 @@ const CustomerSidebarLayout = ({ children }) => {
             <div className="min-h-screen">
                 <div className='flex'>
                     <QuickQuoteSidebar />
-                    <div className="container py-8 max-md:p-3">
+                    <div className="container py-8 max-md:p-3 overflow-hidden">
                         <div className="lg:hidden mb-3 relative">
                             <button
                                 className="w-full flex justify-between items-center px-4 py-3 bg-white rounded-lg shadow"

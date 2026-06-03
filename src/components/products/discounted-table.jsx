@@ -271,7 +271,7 @@ const DiscountedTable = ({ tablesData, setTabelsData, totalItems, totalPages, se
                   <TableCell> {item?.prices !== 0 ? `$${(Number(item?.prices?.price || 0) * Number(item?.quantity || 0)).toFixed(2)}` : '__'} </TableCell>
                   <TableCell>
                     {item?.prices !== 0 ?
-                      <Button onClick={() => handleAdd(item)} disabled={Number(item?.prices?.price || 0) === 0} className="text-sm whitespace-nowrap flex gap-2 items-center"><ShoppingCart size={14} /> Add to Quote </Button> :
+                      <Button onClick={() => handleAdd(item)} title="Add to Quote" disabled={Number(item?.prices?.price || 0) === 0} className="text-sm whitespace-nowrap flex gap-2 items-center"><ShoppingCart size={14} /> Add to Quote</Button> :
                       <p className="text-base mb-0">
                         Updating stock
                         Please call for price

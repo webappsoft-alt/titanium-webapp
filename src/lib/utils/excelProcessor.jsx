@@ -272,7 +272,8 @@ const ExcelProcessor = ({ handleGetProduct }) => {
             "Primary Dim 1 Tolerance",
             "density",
             "lbs./ft. with tolerances",
-            "lbs./ft. \r\nw/o tolerances"
+            "lbs./ft. \r\nw/o tolerances",
+            "Secondary Dim 2 Tolerance",
         ]);
         const lengthToleranceColumns = trimColumnNames([
             "Length",
@@ -339,6 +340,7 @@ const ExcelProcessor = ({ handleGetProduct }) => {
                 lbFTwithoutTol: normalizedRow[optionalColumns[9]] || "",
                 discountedType: normalizedRow[discountColumns[1]],
                 uniqueID: newUniqueID,
+                secondaryTol: normalizedRow[optionalColumns[10]] || "",
             };
         });
 

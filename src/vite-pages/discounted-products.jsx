@@ -7,12 +7,14 @@ import ApiFunction from "@/lib/api/apiFuntions";
 import DiscountedTable from "@/components/products/discounted-table";
 import SpinnerOverlay from "@/components/ui/spinnerOverlay";
 import Select from "react-select";
+import { increasePrice } from "@/lib/api/encrypted";
 
 export function DiscountedProductsPage() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const userData = useSelector((state) => state.auth.userData);
+  const competMarkup = useSelector((state) => state.prod.competMarkup);
   const [count, setCount] = useState(null);
   const [lastId, setLastId] = useState(1);
   const [tabelsData, setTabelsData] = useState([]);
@@ -168,7 +170,14 @@ export function DiscountedProductsPage() {
       primaryDimension: selectedPrimaryDim || "",
     })
       .then((result) => {
-        setTabelsData(result?.products);
+        const products = (result?.products || []).map((product) => ({
+          ...product,
+          prices: product?.prices
+            ? { ...product.prices, price: increasePrice(product.prices.price, userData?.isCompetitor, competMarkup) }
+            : product.prices,
+        }));
+        console.log(result?.products )
+        setTabelsData(products);
         setCount(result?.count);
       })
       .catch((err) => {
@@ -216,11 +225,11 @@ export function DiscountedProductsPage() {
   return (
     <div className="flex-1 bg-white">
       {(isLoading || isLoadingTransform) && <SpinnerOverlay />}
-      <div className=" mx-auto md:px-8 py-6">
+      <div className=" mx-auto py-6">
         <h1 className="text-2xl font-bold mb-4">Discounted Products</h1>
 
         {/* Product Selection Section */}
-        <div className="bg-white rounded-lg shadow-sm p-6 max-sm:px-2 mb-8">
+        <div className="py-6 max-sm:px-2">
           <div className="flex gap-8 items-center flex-wrap">
             <div>
               <img
