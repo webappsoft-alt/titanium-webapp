@@ -50,7 +50,6 @@ const PaymentMethodForm = () => {
     });
 
     const onSubmit = (data) => {
-        console.log('Form submitted', data);
     };
 
     return (

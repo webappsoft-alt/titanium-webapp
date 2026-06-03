@@ -13,7 +13,6 @@ export function middleware(request) {
   // if url has query params for discount so that we can allow access to that page > discounted-products & /customer wil be removed in params  
   // http://localhost:5004/customer/discounted-products?product=Alloy+Steel&form=Round+Bar&grade=8740&spec=Centerless+Ground+Annealed%2C+Per+AMS+6322%2C+AMS+2301%2C+ASTM+A331&dim=%C3%98+0.885%22
   const queryparams = request.nextUrl.searchParams.get('product');
-  // console.log('queryparams', queryparams)
 
 
   if (currentUser && isQuick) {

@@ -59,7 +59,6 @@ const ToleranceWeight = () => {
       };
     });
 
-    console.log(transformedData);
     return transformedData;
   };
 

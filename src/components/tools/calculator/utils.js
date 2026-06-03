@@ -165,7 +165,6 @@ export const customCutFormula = ({ type, M3, N3, O3 = 0, P3 = 0 }) => {
     case 'plate':
     case 'rectangular bar':
     case 'sheet':
-      console.log({ DDDVAL: D1 * D2 })
       return D1 * D2;
 
     case 'hollow bar':

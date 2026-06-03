@@ -59,7 +59,6 @@ const ApiFunction = () => {
 
         // Check for duplicate requests
         if (deduplicate && activeRequestsRef.current.has(requestKey)) {
-            console.log('Preventing duplicate GET request:', requestKey);
             return activeRequestsRef.current.get(requestKey);
         }
 
@@ -99,7 +98,6 @@ const ApiFunction = () => {
 
         // Check for duplicate requests
         if (deduplicate && activeRequestsRef.current.has(requestKey)) {
-            console.log('Preventing duplicate POST request:', requestKey);
             return activeRequestsRef.current.get(requestKey);
         }
 
@@ -199,7 +197,6 @@ const ApiFunction = () => {
     // Helper to cancel all active requests
     const cancelAllRequests = useCallback(() => {
         activeRequestsRef.current.forEach((promise, key) => {
-            console.log('Cancelling request:', key);
             // Since we don't have direct access to the controller, we can't cancel
             // But we can flag these as inactive
             activeRequestsRef.current.delete(key);

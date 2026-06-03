@@ -435,15 +435,6 @@ export function QuoteForm() {
     const totalSellingValueIN = totalMetalPortionPerOrder + totalCuttingPortionPerOrder
     const totalUnitSellingPricePerPC = totalSellingValueIN / totalQuantity
 
-
-    console.table({
-      ...item,
-      krefLossTotal,
-      krefSubTotal,
-      totalMetalPortionPerOrder,
-      totalSellingValueIN,
-      totalUnitSellingPricePerPC
-    })
     return {
       ...item,
       krefLossTotal,
@@ -570,7 +561,13 @@ export function QuoteForm() {
     setIsLoading(true);
     const isCustomCut = Number(item?.cutLength) > 0
     const qtyPrice = isCustomCut ? await handleCustomCutCalulation({ price: 1, isCustomCut: isCustomCut, item: item?.customCut || null, cartData: item, totalQuantity: Number(quantity), priceReturn: true }) : quantity
-    const { min, max } = getPriceForWeight(qtyPrice?.totalWeightLbs ? Number(qtyPrice?.totalWeightLbs) : Number(qtyPrice));
+    const weightRange = getPriceForWeight(qtyPrice?.totalWeightLbs ? Number(qtyPrice?.totalWeightLbs) : Number(qtyPrice));
+    if (!weightRange) {
+      setIsLoading(false);
+      alert("Your selection exceeds maximum quantities available through our website. Please contact us today: email us at sales@titanium.com or call +1 973.983.1185");
+      return;
+    }
+    const { min, max } = weightRange;
     let priceLabel = "";
     if (item?.type === "pipe-fitting") {
       priceLabel = quantity;
@@ -627,9 +624,7 @@ export function QuoteForm() {
       setIsLoading(false);
       handleGetCart()
     }
-  };
-  console.log(toleranceData)
- 
+  }; 
   const getToleranceValue = (labelArr, addInches = true) => {
     if (!toleranceData?.tolerance?.length) return "";
 
@@ -683,7 +678,13 @@ export function QuoteForm() {
       priceLabel = nData?.quantity;
     } else {
       const qtyPrice = isCustomCut ? await handleCustomCut({ price: Number(1), isCustomCut: isCustomCut, priceReturn: true }) : Number(nData?.quantity)
-      const { min, max } = getPriceForWeight(qtyPrice?.totalWeightLbs ? Number(qtyPrice?.totalWeightLbs) : Number(qtyPrice));
+      const weightRange = getPriceForWeight(qtyPrice?.totalWeightLbs ? Number(qtyPrice?.totalWeightLbs) : Number(qtyPrice));
+      if (!weightRange) {
+        setIsLoading(false);
+        alert("Your selection exceeds maximum quantities available through our website. Please contact us today: email us at sales@titanium.com or call +1 973.983.1185");
+        return;
+      }
+      const { min, max } = weightRange;
       priceLabel =
         uomData === "lb"
           ? `$/${uomData}. Sales Price for ${min}  to ${max} lbs.`

@@ -116,7 +116,6 @@ const ImportCountryExcel = ({ handleCountries }) => {
 
     const validateAndTransformData = (data) => {
         let transformedData = [];
-        console.log(data)
         data.forEach((row) => {
             let structuredItem = {
                 old_id: row?.id,

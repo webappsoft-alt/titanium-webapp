@@ -474,7 +474,6 @@ const ExcelProcessor = ({ handleGetProduct }) => {
                     setStructuredData([])
                     await post('file/create', { ...uploadedFileDetail, uploadedType: data?.type })
                         .then((result) => {
-                            console.log(result)
                             setUploadedFileDetail(null)
                         }).catch((err) => {
                             console.log(err)
