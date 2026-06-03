@@ -267,16 +267,20 @@ const DiscountedTable = ({ tablesData, setTabelsData, totalItems, totalPages, se
                       </Select>
                     </div>
                   </TableCell>
-                  <TableCell>{item?.prices !== 0 ? `$${Number(item?.prices?.price || 0).toFixed(2)}` : '__'}</TableCell>
-                  <TableCell> {item?.prices !== 0 ? `$${(Number(item?.prices?.price || 0) * Number(item?.quantity || 0)).toFixed(2)}` : '__'} </TableCell>
                   <TableCell>
-                    {item?.prices !== 0 ?
+                    {isLogin ? (item?.prices !== 0 ? `$${Number(item?.prices?.price || 0).toFixed(2)}` : '__') : <a href="/auth/login" className="text-blue-600 underline text-sm">Login to see price</a>}
+                  </TableCell>
+                  <TableCell>
+                    {isLogin ? (item?.prices !== 0 ? `$${(Number(item?.prices?.price || 0) * Number(item?.quantity || 0)).toFixed(2)}` : '__') : '—'}
+                  </TableCell>
+                  <TableCell>
+                    {isLogin ? (item?.prices !== 0 ?
                       <Button onClick={() => handleAdd(item)} title="Add to Quote" disabled={Number(item?.prices?.price || 0) === 0} className="text-sm whitespace-nowrap flex gap-2 items-center"><ShoppingCart size={14} /> Add to Quote</Button> :
                       <p className="text-base mb-0">
                         Updating stock
                         Please call for price
                         (888) 482-6486
-                      </p>}
+                      </p>) : <a href="/auth/login" className="text-blue-600 underline text-sm">Login to add to quote</a>}
                   </TableCell>
                 </TableRow>
               </TableBody>
