@@ -9,6 +9,7 @@ Font.register({
         { src: `/arial-font/arial.ttf`, fontWeight: 'normal' },
     ]
 });
+Font.registerHyphenationCallback(word => [word]);
 function formatMillProduct({
     primaryDimension,
     primaryTolerance,
@@ -17,6 +18,7 @@ function formatMillProduct({
     const stripQuotes = (value) =>
         String(value ?? "")
             .replace(/"/g, "")
+            .replace(/^[\-–—\s]+/, "")
             .trim();
 
     const dimension = stripQuotes(primaryDimension);
