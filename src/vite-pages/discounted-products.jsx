@@ -22,7 +22,6 @@ export function DiscountedProductsPage() {
   const [isLoadingTransform, setIsLoadingTransform] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [productsForm, setProductsForm] = useState([]);
-
   const [selectedProduct, setSelectedProduct] = useState({
     label: "All",
     value: "",
@@ -37,7 +36,7 @@ export function DiscountedProductsPage() {
   const [filterData, setfilterData] = useState(null);
 
   const { get } = ApiFunction();
-
+  const isPublicPage = pathname === '/discounted-products'
   // Check if user is not logged in and redirect from /customer path
   useEffect(() => {
     if (!userData && pathname.includes("/customer/")) {
@@ -99,8 +98,8 @@ export function DiscountedProductsPage() {
       item?.type === "mill-product"
         ? "Mill Product"
         : item?.type === "pipe-fitting"
-        ? "Pipe & Fittings"
-        : "Margin Guidelines",
+          ? "Pipe & Fittings"
+          : "Margin Guidelines",
 
     options: item?.products?.map((p) => ({
       label: p.product,
@@ -176,7 +175,6 @@ export function DiscountedProductsPage() {
             ? { ...product.prices, price: increasePrice(product.prices.price, userData?.isCompetitor, competMarkup) }
             : product.prices,
         }));
-        console.log(result?.products )
         setTabelsData(products);
         setCount(result?.count);
       })
@@ -225,7 +223,7 @@ export function DiscountedProductsPage() {
   return (
     <div className="flex-1 bg-white">
       {(isLoading || isLoadingTransform) && <SpinnerOverlay />}
-      <div className=" mx-auto py-6">
+      <div className={`mx-auto py-6 ${isPublicPage &&'px-6'}`}>
         <h1 className="text-2xl font-bold mb-4">Discounted Products</h1>
 
         {/* Product Selection Section */}

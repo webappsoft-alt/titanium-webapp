@@ -1,6 +1,6 @@
 import axios from "axios"
 
-export const baseURL = 'https://api.titanium.com/api/'
+export const baseURL = process.env.NEXT_PUBLIC_API_URL ?? 'https://api.titanium.com/api/'
 // export const baseURL = 'http://localhost:5004/api/'
 
 export const axiosInstance = axios.create({
