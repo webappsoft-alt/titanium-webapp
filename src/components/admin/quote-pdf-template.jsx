@@ -74,7 +74,7 @@ function formatMillProduct({
 
 const styles = StyleSheet.create({
     page: {
-        padding: 50,
+        padding: 40,
         flexGrow: 1,
         paddingTop: 20,
         paddingBottom: 120, // Make space for footer
@@ -153,8 +153,8 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         marginLeft: 'auto'
     },
-    itemCol: { width: '25%' },
-    specCol: { width: '36%' },
+    itemCol: { width: '27%' },
+    specCol: { width: '34%' },
     qtyCol: { width: '5%', textAlign: 'right' },
     uomCol: { width: '5%', textAlign: 'right' },
     rateCol: { width: '15%', textAlign: 'right' },
