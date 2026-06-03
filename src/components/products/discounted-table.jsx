@@ -15,6 +15,7 @@ import { Select, SelectOption } from "../ui/select";
 import ApiFunction from "@/lib/api/apiFuntions";
 import SpinnerOverlay from "../ui/spinnerOverlay";
 import { Button } from "../ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "../ui/dialog";
 import { increasePrice } from "@/lib/api/encrypted";
 import { useSelector } from "react-redux";
 import { Spinner } from "../ui/spinner";
@@ -39,6 +40,7 @@ const DiscountedTable = ({ tablesData, setTabelsData, totalItems, totalPages, se
   const { get, post } = ApiFunction();
   const { push } = useRouter()
   const [quantityData, setQuantityData] = useState({});
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const priceRanges = [
     { min: 0, max: 1, },
     { min: 1.01, max: 2, },
@@ -121,6 +123,10 @@ const DiscountedTable = ({ tablesData, setTabelsData, totalItems, totalPages, se
   };
 
   const handleOnBlurQuantity = async (i, item, quantity) => {
+    if (!isLogin) {
+      setShowLoginModal(true);
+      return;
+    }
     if (!Number(quantity) > 0) {
       return
     }
@@ -267,20 +273,16 @@ const DiscountedTable = ({ tablesData, setTabelsData, totalItems, totalPages, se
                       </Select>
                     </div>
                   </TableCell>
+                  <TableCell>{item?.prices !== 0 ? `$${Number(item?.prices?.price || 0).toFixed(2)}` : '__'}</TableCell>
+                  <TableCell> {item?.prices !== 0 ? `$${(Number(item?.prices?.price || 0) * Number(item?.quantity || 0)).toFixed(2)}` : '__'} </TableCell>
                   <TableCell>
-                    {isLogin ? (item?.prices !== 0 ? `$${Number(item?.prices?.price || 0).toFixed(2)}` : '__') : <a href="/auth/login" className="text-blue-600 underline text-sm">Login to see price</a>}
-                  </TableCell>
-                  <TableCell>
-                    {isLogin ? (item?.prices !== 0 ? `$${(Number(item?.prices?.price || 0) * Number(item?.quantity || 0)).toFixed(2)}` : '__') : '—'}
-                  </TableCell>
-                  <TableCell>
-                    {isLogin ? (item?.prices !== 0 ?
+                    {item?.prices !== 0 ?
                       <Button onClick={() => handleAdd(item)} title="Add to Quote" disabled={Number(item?.prices?.price || 0) === 0} className="text-sm whitespace-nowrap flex gap-2 items-center"><ShoppingCart size={14} /> Add to Quote</Button> :
                       <p className="text-base mb-0">
                         Updating stock
                         Please call for price
                         (888) 482-6486
-                      </p>) : <a href="/auth/login" className="text-blue-600 underline text-sm">Login to add to quote</a>}
+                      </p>}
                   </TableCell>
                 </TableRow>
               </TableBody>
@@ -307,6 +309,21 @@ const DiscountedTable = ({ tablesData, setTabelsData, totalItems, totalPages, se
           </Pagination>
         </div>
       </div>
+
+      <Dialog open={showLoginModal} onClose={() => setShowLoginModal(false)}>
+        <DialogContent onClose={() => setShowLoginModal(false)}>
+          <DialogHeader>
+            <DialogTitle>Login Required</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-gray-600">
+            Please log in to see pricing and add items to your quote.
+          </p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowLoginModal(false)}>Cancel</Button>
+            <Button onClick={() => push('/auth/login')}>Login</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
