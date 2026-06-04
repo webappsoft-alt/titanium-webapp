@@ -21,6 +21,9 @@ function formatMillProduct({
             .replace(/^[\-–—\s]+/, "")
             .trim();
 
+    const normalizeNumber = (value) =>
+        value.startsWith(".") ? `0${value}` : value;
+
     const dimension = stripQuotes(primaryDimension);
     const primaryTol = stripQuotes(primaryTolerance);
     const secondaryTol = stripQuotes(secondaryTolerance);
@@ -30,13 +33,13 @@ function formatMillProduct({
     // Case 1: 0.032 thick
     match = dimension.match(/^([\d.]+)\s*thick$/i);
     if (match && primaryTol) {
-        return `${match[1]} ± ${primaryTol}" thick`;
+        return `${normalizeNumber(match[1])} ± ${primaryTol}" thick`;
     }
 
     // Case 2: RECT 1.000 x 1.500
     match = dimension.match(/^RECT\s+([\d.]+)\s*x\s*([\d.]+)$/i);
     if (match && primaryTol && secondaryTol) {
-        return `RECT ${match[1]} ± ${primaryTol}" thick x ${match[2]} ± ${secondaryTol}" wide`;
+        return `RECT ${normalizeNumber(match[1])} ± ${primaryTol}" thick x ${normalizeNumber(match[2])} ± ${secondaryTol}" wide`;
     }
 
     // Case 3: 3.000 Sch/10
@@ -45,32 +48,29 @@ function formatMillProduct({
     }
 
     // Case 4: 0.250 OD x 0.035 wall
-    match = dimension.match(
-        /^([\d.]+)\s*OD\s*x\s*([\d.]+)\s*wall$/i
-    );
+    match = dimension.match(/^([\d.]+)\s*OD\s*x\s*([\d.]+)\s*wall$/i);
     if (match && primaryTol && secondaryTol) {
-        return `${match[1]} ± ${primaryTol}" OD x ${match[2]} ± ${secondaryTol}" wall`;
+        return `${normalizeNumber(match[1])} ± ${primaryTol}" OD x ${normalizeNumber(match[2])} ± ${secondaryTol}" wall`;
     }
 
     // Case 5: Ø 0.063
     match = dimension.match(/^Ø\s*([\d.]+)$/i);
     if (match && primaryTol) {
-        return `Ø ${match[1]} ± ${primaryTol}"`;
+        return `Ø ${normalizeNumber(match[1])} ± ${primaryTol}"`;
     }
 
     // Case 6: HEX .625
     match = dimension.match(/^HEX\s*([.\d]+)$/i);
     if (match && primaryTol) {
-        return `HEX ${match[1]} ± ${primaryTol}"`;
+        return `HEX ${normalizeNumber(match[1])} ± ${primaryTol}"`;
     }
 
     // Case 7: 1.125
-    match = dimension.match(/^([\d.]+)$/);
+    match = dimension.match(/^([.\d]+)$/);
     if (match && primaryTol) {
-        return `${match[1]} ± ${primaryTol}"`;
+        return `${normalizeNumber(match[1])} ± ${primaryTol}"`;
     }
 
-    // Unknown format
     return primaryDimension;
 }
 
