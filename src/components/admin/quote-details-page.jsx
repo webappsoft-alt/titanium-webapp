@@ -64,7 +64,8 @@ const QuoteDetailsPage = () => {
           toast.success(result.message)
           // dispatch(setQuoteData(result?.data))
           if (data === 'approved') {
-            const blob = await pdf(<QuotationPDFTemplate quotationData={result?.data} />).toBlob();
+            const salesperson = { accountManager: result?.data?.user?.accountManager ?? null, regionalManager: result?.data?.user?.regionalManager ?? null, salesRep: result?.data?.user?.salesRep ?? null, }
+            const blob = await pdf(<QuotationPDFTemplate quotationData={result?.data} salesperson={salesperson}/>).toBlob();
 
             const formData = new FormData();
             formData.append('pdf', blob, 'quotation.pdf');

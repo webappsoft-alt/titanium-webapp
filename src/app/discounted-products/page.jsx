@@ -1,9 +1,11 @@
-import { DiscountedProductsPage } from "@/vite-pages/discounted-products"
+// import { DiscountedProductsPage } from "@/vite-pages/discounted-products"
+import { redirect } from "next/navigation"
 
 const Page = () => {
-    return (
-        <> <DiscountedProductsPage /> </>
-    )
+    redirect('/customer/discounted-products')
+    // return (
+    //     <> <DiscountedProductsPage /> </>
+    // )
 }
 
 export default Page

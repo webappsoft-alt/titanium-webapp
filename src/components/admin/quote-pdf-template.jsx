@@ -200,6 +200,27 @@ const styles = StyleSheet.create({
         width: '90%',
         textAlign: 'justify',
     },
+    salespersonContainer: {
+        position: 'absolute',
+        bottom: 100,
+        left:0,
+        right:0,
+        display: 'flex',
+        flexDirection:'column',
+        alignItems:'center',
+        marginTop: 16,
+        marginBottom: 10,
+    },
+    salespersonTitle: {
+        fontSize: 10,
+        fontFamily: 'Arial',
+        fontWeight: 'bold',
+        marginBottom: 6,
+    },
+    salespersonRow: {
+        fontSize: 10,
+        marginBottom: 3,
+    },
     footer: {
         position: 'absolute',
         bottom: 30,
@@ -280,7 +301,19 @@ const Footer = ({ headerData }) => (
 const formatCurrency = (value) =>
     Number(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-const QuotationPDFTemplate = ({ quotationData }) => {
+const getUniqueSalespersons = (salesperson) => {
+    if (!salesperson) return [];
+    const seen = new Set();
+    return [salesperson.accountManager, salesperson.regionalManager, salesperson.salesRep]
+        .filter(p => p && p._id && (p.fname || p.email))
+        .filter(p => {
+            if (seen.has(p._id)) return false;
+            seen.add(p._id);
+            return true;
+        });
+};
+
+const QuotationPDFTemplate = ({ quotationData, salesperson }) => {
     const headerData = {
         companyLogo: '/assets/logo.png', // Replace with your logo path
         companyName: "Your Company Name",
@@ -414,7 +447,18 @@ const QuotationPDFTemplate = ({ quotationData }) => {
                             We appreciate your business and look forward to receiving your order
                         </Text>
                     </View>
+
                 </View>
+                {getUniqueSalespersons(salesperson).length > 0 && (
+                    <View style={styles.salespersonContainer}>
+                        <Text style={styles.salespersonTitle}>Your Sales Contact{getUniqueSalespersons(salesperson).length > 1 ? 's' : ''}:</Text>
+                        {getUniqueSalespersons(salesperson).map((p) => (
+                            <Text key={p._id} style={styles.salespersonRow}>
+                                {p.fname}{p.email ? `  |  ${p.email}` : ''}
+                            </Text>
+                        ))}
+                    </View>
+                )}
 
                 <Footer quotationData={quotationData} headerData={headerData} />
 

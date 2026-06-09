@@ -12,6 +12,7 @@ import { QuoteFilterForm } from '@/components/admin/filter-quote';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import dynamic from "next/dynamic";
+import { useSelector } from 'react-redux';
 const QuotationGenerator = dynamic(() => import("../../components/admin/quote-pdf"), { ssr: false });
 
 const columnHelper = createColumnHelper();
@@ -38,7 +39,9 @@ export function CustomerQuotesPage({ apiType = "" }) {
   const [isLoading, setIsLoading] = useState(true)
   const [quotationData, setQuotationData] = useState([]);
   const pathname = usePathname()
+  const userData = useSelector(state => state.auth.userData)
   const [lastId, setLastId] = useState(1);
+  const salesperson = { accountManager: userData?.accountManager ?? null, regionalManager: userData?.regionalManager ?? null, salesRep: userData?.salesRep ?? null, }
   const handleGet = async (pageNo = 1) => {
     setIsLoading(true)
     await get(`quotation/user/${pageNo}`, { ...formData, stats: apiType })
@@ -116,7 +119,7 @@ export function CustomerQuotesPage({ apiType = "" }) {
       header: 'Actions',
       cell: ({ row }) => (
         <div className="flex justify-center items-center ">
-          <QuotationGenerator quotationData={row.original} />
+          <QuotationGenerator quotationData={row.original} salesperson={salesperson} />
         </div>
       ),
     }),

@@ -25,6 +25,7 @@ const CustomerDashboard = () => {
     const [quotData, setQuotData] = useState({ quotations: [], orders: [] });
     const [isLoading, setIsLoading] = useState(false);
     const { push } = useRouter()
+    const salesperson = { accountManager: userData?.accountManager ?? null, regionalManager: userData?.regionalManager ?? null, salesRep: userData?.salesRep ?? null, }
     const handleGetQuotes = useCallback(async () => {
         setIsLoading(true)
         await get('quotation/user', { stats: 'dashboard' })
@@ -87,7 +88,7 @@ const CustomerDashboard = () => {
                                     <div className="max-xl:flex items-center gap-2  xl:hidden">
                                         <strong>Quote:</strong>
                                         <div className="">
-                                            <QuotationGenerator id={item?._id} quoteId={item?.quoteNo} />
+                                            <QuotationGenerator id={item?._id} quoteId={item?.quoteNo} salesperson={salesperson} />
                                         </div>
                                     </div>
                                     <div className='flex flex-wrap sm:flex-nowrap sm:items-center justify-between gap-2'>
@@ -96,7 +97,7 @@ const CustomerDashboard = () => {
                                         <div className=" xl:flex items-center gap-2 break-words max-xl:hidden">
                                             <strong>Quote:</strong>
                                             <div className="">
-                                                <QuotationGenerator id={item?._id} quoteId={item?.quoteNo} />
+                                                <QuotationGenerator id={item?._id} quoteId={item?.quoteNo} salesperson={salesperson} />
                                             </div>
                                         </div>
 
@@ -136,7 +137,7 @@ const CustomerDashboard = () => {
                                     <div className="max-xl:flex items-center gap-2  xl:hidden">
                                         <strong>Order:</strong>
                                         <div className="">
-                                            <QuotationGenerator id={item?._id} quoteId={item?.orderNo} />
+                                            <QuotationGenerator id={item?._id} quoteId={item?.orderNo} salesperson={salesperson} />
                                         </div>
                                     </div>
                                     <div className='flex flex-wrap sm:flex-nowrap sm:items-center justify-between gap-2'>
@@ -145,7 +146,7 @@ const CustomerDashboard = () => {
                                         <div className=" xl:flex items-center gap-2 break-words max-xl:hidden">
                                             <strong>Order:</strong>
                                             <div className="">
-                                                <QuotationGenerator id={item?._id} quoteId={item?.orderNo} />
+                                                <QuotationGenerator id={item?._id} quoteId={item?.orderNo} salesperson={salesperson} />
                                             </div>
                                         </div>
 

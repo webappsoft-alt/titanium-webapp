@@ -55,12 +55,12 @@ export function PaymentCard({ setIsActive, quoteData }) {
     ];
 
     const onSubmit = async (data) => {
-
+        const salesperson = { accountManager: userData?.accountManager ?? null, regionalManager: userData?.regionalManager ?? null, salesRep: userData?.salesRep ?? null, }
         try {
             setIsLoading(true)
             const response = await post('quotation/create', { ...data, ...checkoutData, totalAmount: (checkoutData?.totalAmount + checkoutData?.frieght || 0).toFixed(2) })
             if (response?.success) {
-                const blob = await pdf(<QuotationPDFTemplate quotationData={response?.quotation} />).toBlob();
+                const blob = await pdf(<QuotationPDFTemplate quotationData={response?.quotation} salesperson={salesperson}/>).toBlob();
 
                 const formData = new FormData();
                 formData.append('pdf', blob, 'quotation.pdf');
